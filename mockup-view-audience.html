@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>View Audience Mockup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 48px;
+      flex-wrap: wrap;
+      padding: 40px 24px;
+    }
+
+    .card-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* MODAL SHELL */
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      width: 440px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.13);
+      overflow: hidden;
+    }
+
+    /* HEADER */
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-header h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    .close-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f5f5f5;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* BODY */
+    .modal-body {
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    .info-label {
+      font-size: 13px;
+      color: #888;
+      font-weight: 500;
+      min-width: 120px;
+    }
+    .info-value {
+      font-size: 13px;
+      color: #1a1a1a;
+      font-weight: 500;
+      text-align: right;
+      flex: 1;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-dynamic {
+      background: #fff4e5;
+      color: #e07a00;
+    }
+    .badge-static {
+      background: #e8f4ff;
+      color: #0070cc;
+    }
+
+    /* RULES */
+    .rules-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .rule-chip {
+      background: #f5f5f5;
+      color: #333;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .rule-chip .op {
+      color: #888;
+      font-weight: 400;
+    }
+    .rule-chip .val {
+      background: #e8e8e8;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    /* LIVE BADGE */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #16a34a;
+      background: #dcfce7;
+      border-radius: 20px;
+      padding: 2px 7px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .live-badge::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #16a34a;
+      display: inline-block;
+    }
+
+    /* LOADING STATE */
+    .skeleton {
+      display: inline-block;
+      width: 90px;
+      height: 14px;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 4px;
+      vertical-align: middle;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* MEMBER COUNT NOTE */
+    .note {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 2px;
+      text-align: right;
+    }
+
+    /* FOOTER */
+    .modal-footer {
+      padding: 14px 24px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .btn-close {
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* DIVIDER between two mockups */
+    .vs {
+      font-size: 13px;
+      font-weight: 700;
+      color: #bbb;
+      align-self: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURRENT (BAD) -->
+  <div class="card-wrapper">
+    <div class="label">Current</div>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>View Audience</h2>
+        <button class="close-btn">✕</button>
+      </div>
+      <div class="modal-body" style="gap:20px; padding: 24px;">
+        <div>
+          <div style="font-size:12px;color:#888;margin-bottom:6px;">Audience Name</div>
+          <div style="font-size:14px;font-weight:500;">List Creation with Tags</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:#888;margin-bottom:8px;">List Type</div>
+          <div style="display:inline-block;border:1px solid #ccc;border-radius:20px;padding:6px 18px;font-size:13px;">Dynamic</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:#888;margin-bottom:8px;">Rules</div>
+          <div style="display:flex;gap:10px;">
+            <div style="border:1px solid #ccc;border-radius:20px;padding:6px 16px;font-size:13px;">Tags</div>
+            <div style="border:1px solid #ccc;border-radius:20px;padding:6px 16px;font-size:13px;">has</div>
+            <div style="border:1px solid #ccc;border-radius:20px;padding:6px 16px;font-size:13px;">UNI</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="vs">→</div>
+
+  <!-- PROPOSED — DYNAMIC LIST (loading state) -->
+  <div class="card-wrapper">
+    <div class="label">Proposed — Dynamic (loading)</div>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>View Audience</h2>
+        <button class="close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-row">
+          <span class="info-label">Name</span>
+          <span class="info-value">List Creation with Tags</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Type</span>
+          <span class="info-value"><span class="badge badge-dynamic">Dynamic</span></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Members</span>
+          <div style="text-align:right;">
+            <span class="skeleton"></span>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Created</span>
+          <span class="info-value">Apr 19, 2026</span>
+        </div>
+        <div class="info-row" style="align-items:center;">
+          <span class="info-label">Rules</span>
+          <div class="rules-wrap">
+            <div class="rule-chip">Tags <span class="op">has</span> <span class="val">UNI</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSED — DYNAMIC LIST (loaded state) -->
+  <div class="card-wrapper">
+    <div class="label">Proposed — Dynamic (loaded)</div>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>View Audience</h2>
+        <button class="close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-row">
+          <span class="info-label">Name</span>
+          <span class="info-value">List Creation with Tags</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Type</span>
+          <span class="info-value"><span class="badge badge-dynamic">Dynamic</span></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Members</span>
+          <div style="text-align:right;">
+            <span class="info-value">1,243 contacts<span class="live-badge">live</span></span>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Created</span>
+          <span class="info-value">Apr 19, 2026</span>
+        </div>
+        <div class="info-row" style="align-items:center;">
+          <span class="info-label">Rules</span>
+          <div class="rules-wrap">
+            <div class="rule-chip">Tags <span class="op">has</span> <span class="val">UNI</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPOSED (GOOD) — STATIC LIST -->
+  <div class="card-wrapper">
+    <div class="label">Proposed — Static List</div>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>View Audience</h2>
+        <button class="close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-row">
+          <span class="info-label">Name</span>
+          <span class="info-value">Spring 2026 Leads</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Type</span>
+          <span class="info-value"><span class="badge badge-static">Static</span></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Members</span>
+          <span class="info-value">347 contacts</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Created</span>
+          <span class="info-value">Apr 19, 2026</span>
+        </div>
+        <div class="info-row" style="align-items:center;">
+          <span class="info-label">Rules</span>
+          <div class="rules-wrap">
+            <div class="rule-chip">Tags <span class="op">has</span> <span class="val">VIP</span></div>
+            <div class="rule-chip">City <span class="op">is</span> <span class="val">Rome</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

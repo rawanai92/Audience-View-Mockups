@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coretava — Product Mockups</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+      padding: 48px 32px;
+    }
+    .header {
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .header p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      max-width: 1000px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px 22px;
+      text-decoration: none;
+      display: block;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border-color: #cbd5e1;
+    }
+    .card-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .tag-ux   { background: #ede9fe; color: #6d28d9; }
+    .tag-arch { background: #dbeafe; color: #1d4ed8; }
+    .card h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+    .card-arrow {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Coretava — Product Mockups</h1>
+    <p>Design references and architecture diagrams · Internal use only</p>
+  </div>
+
+  <div class="grid">
+
+    <a class="card" href="mockup-view-audience.html">
+      <span class="card-tag tag-ux">UX Mockup</span>
+      <h2>Audience Manager — View Audience Modal</h2>
+      <p>Redesigned modal showing current vs proposed layout for static and dynamic lists, including live member count for dynamic audiences.</p>
+      <div class="card-arrow">Open mockup →</div>
+    </a>
+
+    <a class="card" href="mockup-brain-node-crm.html">
+      <span class="card-tag tag-ux">UX Mockup</span>
+      <h2>Brain Node — CRM Contact Post-Config</h2>
+      <p>How configured CRM Contact conditions should appear on the flow canvas — chips, OR/AND logic, truncation states, multi-group patterns.</p>
+      <div class="card-arrow">Open mockup →</div>
+    </a>
+
+    <a class="card" href="campaign-taxonomy-diagram.html">
+      <span class="card-tag tag-arch">Architecture</span>
+      <h2>Campaign Taxonomy Diagram</h2>
+      <p>Overview of campaign types across CorePilot and DSP/SSP — CRM Communication, CRM Ad, Meta, and DV360 with key attributes.</p>
+      <div class="card-arrow">Open diagram →</div>
+    </a>
+
+    <a class="card" href="campaign-architecture-diagram.html">
+      <span class="card-tag tag-arch">Architecture</span>
+      <h2>Campaign Architecture — System & Data Flow</h2>
+      <p>Developer-level diagram showing service boxes, data flows, execution paths, code file references, and the active bug + fix.</p>
+      <div class="card-arrow">Open diagram →</div>
+    </a>
+
+  </div>
+</body>
+</html>

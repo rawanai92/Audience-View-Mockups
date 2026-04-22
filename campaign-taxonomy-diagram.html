@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coretava Campaign Taxonomy</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f7;
+      padding: 48px 32px 64px;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a1a2e;
+      letter-spacing: -0.3px;
+    }
+    .header p {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #888;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ─── Root label ─────────────────────────────────────────── */
+    .root-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+    .root-node {
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 10px;
+      padding: 12px 36px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    /* ─── SVG connector from root to branches ───────────────── */
+    .connector-top {
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* ─── Two-branch row ─────────────────────────────────────── */
+    .branches {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      justify-content: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ─── Platform column ────────────────────────────────────── */
+    .platform {
+      flex: 1;
+      max-width: 520px;
+    }
+
+    .platform-label {
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .platform-label.corepilot {
+      background: #e8f4fd;
+      color: #1565c0;
+      border: 1.5px solid #90caf9;
+    }
+    .platform-label.dsp {
+      background: #fce4ec;
+      color: #c62828;
+      border: 1.5px solid #ef9a9a;
+    }
+
+    /* ─── Campaign card ──────────────────────────────────────── */
+    .campaign-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1.5px solid #e0e0e0;
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: box-shadow 0.15s;
+    }
+    .campaign-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    }
+    .campaign-card.future {
+      border-style: dashed;
+      opacity: 0.7;
+    }
+
+    .campaign-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .campaign-subtitle {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+
+    /* ─── Attribute rows ─────────────────────────────────────── */
+    .attrs {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .attr-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .attr-key {
+      color: #999;
+      min-width: 130px;
+      flex-shrink: 0;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .attr-val {
+      color: #2c2c2c;
+      line-height: 1.5;
+    }
+
+    /* ─── Pill badges ────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      border-radius: 20px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 4px;
+      margin-bottom: 2px;
+    }
+    .badge.yes  { background: #e8f5e9; color: #2e7d32; }
+    .badge.no   { background: #fce4ec; color: #c62828; }
+    .badge.chan { background: #e8eaf6; color: #283593; }
+    .badge.future-badge { background: #fff8e1; color: #f57f17; border: 1px dashed #f9a825; }
+
+    /* ─── Divider ─────────────────────────────────────────────── */
+    .card-divider {
+      border: none;
+      border-top: 1px solid #f0f0f0;
+      margin: 12px 0;
+    }
+
+    /* ─── DSP sub-grid (3 cards in one column) ───────────────── */
+    .dsp-cards { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ─── Legend ─────────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #555;
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 11px;
+      color: #bbb;
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Coretava Campaign Taxonomy</h1>
+    <p>Internal Proposal · April 2026 · Product</p>
+  </div>
+
+  <!-- Root node -->
+  <div class="root-wrapper">
+    <div class="root-node">Campaign Category</div>
+  </div>
+
+  <!-- Connector SVG -->
+  <svg class="connector-top" width="600" height="44" viewBox="0 0 600 44">
+    <!-- vertical from root -->
+    <line x1="300" y1="0" x2="300" y2="22" stroke="#ccc" stroke-width="1.5"/>
+    <!-- horizontal bar -->
+    <line x1="110" y1="22" x2="490" y2="22" stroke="#ccc" stroke-width="1.5"/>
+    <!-- down to CorePilot -->
+    <line x1="110" y1="22" x2="110" y2="44" stroke="#ccc" stroke-width="1.5"/>
+    <!-- down to DSP -->
+    <line x1="490" y1="22" x2="490" y2="44" stroke="#ccc" stroke-width="1.5"/>
+  </svg>
+
+  <!-- Two branches -->
+  <div class="branches">
+
+    <!-- ── COREPILOT ────────────────────────────────────────── -->
+    <div class="platform">
+      <div class="platform-label corepilot">CorePilot</div>
+
+      <!-- CRM Communication -->
+      <div class="campaign-card">
+        <div class="campaign-title">CRM Communication</div>
+        <div class="campaign-subtitle">Category 1 · Messaging automation</div>
+        <hr class="card-divider">
+        <div class="attrs">
+          <div class="attr-row">
+            <span class="attr-key">Mental model</span>
+            <span class="attr-val">ActiveCampaign — business messages its own contacts</span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">Channels</span>
+            <span class="attr-val">
+              <span class="badge chan">WhatsApp</span>
+              <span class="badge chan">Email</span>
+              <span class="badge chan">SMS</span>
+              <br><small style="color:#999;font-size:11px;">Defined by flow nodes, not selected upfront</small>
+            </span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">Flow builder</span>
+            <span class="attr-val"><span class="badge yes">✓ Available</span></span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">CRM Contact brain</span>
+            <span class="attr-val"><span class="badge yes">✓ Available</span></span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">Manage Contact</span>
+            <span class="attr-val"><span class="badge yes">✓ Available</span></span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">Budget</span>
+            <span class="attr-val"><span class="badge no">✗ Not required</span></span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">Serving engine</span>
+            <span class="attr-val"><span class="badge no">✗ None</span></span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">Serving modes</span>
+            <span class="attr-val">Batch (campaign) · Per-trigger (flow)</span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">Tracking</span>
+            <span class="attr-val">Impressions · Delivery</span>
+          </div>
+          <div class="attr-row">
+            <span class="attr-key">Key rule</span>
+            <span class="attr-val" style="color:#c62828;font-style:italic;">Manage Contact-only flow must work for all contacts, regardless of email/phone</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Automation (future) -->
+      <div class="campaign-card future">
+        <div class="campaign-title">Automation <span class="badge future-badge">Future — Category 3</span></div>
+        <div class="campaign-subtitle">Scope TBD · Boundary with CRM Communication to be defined</div>
+        <hr class="card-divider">
+        <div class="attrs">
+          <div class="attr-row">
+            <span class="attr-key">Status</span>
+            <span class="attr-val">Acknowledged, not scoped. Will be defined once Category 1 is stable and usage data is available.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DSP / SSP ───────────────────────────────────────── -->
+    <div class="platform">
+      <div class="platform-label dsp">DSP / SSP</div>
+
+      <div class="dsp-cards">
+
+        <!-- CRM Ad Campaign -->
+        <div class="campaign-card">
+          <div class="campaign-title">CRM Ad Campaign</div>
+          <div class="campaign-subtitle">Category 2 · Media buying via CRM channel</div>
+          <hr class="card-divider">
+          <div class="attrs">
+            <div class="attr-row">
+              <span class="attr-key">Mental model</span>
+              <span class="attr-val">Google Ads via CRM — advertiser buys reach through CRM channel</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Ad channel</span>
+              <span class="attr-val"><span class="badge chan">CRM</span> <small style="color:#999;font-size:11px;">(advertisingChannel = CRM)</small></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Audience</span>
+              <span class="attr-val">Ecommerce segment builder (demographics, RFM, behavior, purchase intent)</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Flow builder</span>
+              <span class="attr-val"><span class="badge yes">✓ Available</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">CRM Contact brain</span>
+              <span class="attr-val"><span class="badge no">✗ Not available</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Manage Contact</span>
+              <span class="attr-val"><span class="badge no">✗ Not available</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Budget</span>
+              <span class="attr-val"><span class="badge yes">✓ Required</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Serving engine</span>
+              <span class="attr-val"><span class="badge yes">✓ Yes</span> — segment re-evaluated every 11 hours</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Tracking</span>
+              <span class="attr-val">Impressions · Delivery · Attribution</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meta Ad Campaign -->
+        <div class="campaign-card">
+          <div class="campaign-title">Meta Ad Campaign</div>
+          <div class="campaign-subtitle">Category 2 · Facebook / Instagram</div>
+          <hr class="card-divider">
+          <div class="attrs">
+            <div class="attr-row">
+              <span class="attr-key">Ad channel</span>
+              <span class="attr-val"><span class="badge chan">Meta</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Audience</span>
+              <span class="attr-val">
+                (1) Native Meta audience config — fetched directly from Meta<br>
+                (2) Ecommerce-filter custom audience — exported to Meta
+              </span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Flow builder</span>
+              <span class="attr-val"><span class="badge no">✗ No flow</span> — direct campaign config</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Budget</span>
+              <span class="attr-val"><span class="badge yes">✓ Required</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Serving engine</span>
+              <span class="attr-val"><span class="badge yes">✓ Meta serving engine</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Tracking</span>
+              <span class="attr-val">Impressions · Delivery · Attribution</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DV360 -->
+        <div class="campaign-card">
+          <div class="campaign-title">DV360</div>
+          <div class="campaign-subtitle">Category 2 · Programmatic display</div>
+          <hr class="card-divider">
+          <div class="attrs">
+            <div class="attr-row">
+              <span class="attr-key">Ad channel</span>
+              <span class="attr-val"><span class="badge chan">DV360</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Setup</span>
+              <span class="attr-val">Insertion Order (IO) + Line Items</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Flow builder</span>
+              <span class="attr-val"><span class="badge no">✗ No flow</span> — IO / line item configuration</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Budget</span>
+              <span class="attr-val"><span class="badge yes">✓ Required</span></span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">Tracking</span>
+              <span class="attr-val">Impressions · Delivery · Attribution</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /dsp-cards -->
+    </div><!-- /dsp platform -->
+  </div><!-- /branches -->
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#2e7d32;"></div>
+      Available / Required
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#c62828;"></div>
+      Not available / Not required
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#283593;"></div>
+      Channel
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#f57f17; border-radius:0;"></div>
+      Future / TBD
+    </div>
+  </div>
+
+  <!-- Key distinction callout -->
+  <div style="max-width:760px;margin:32px auto 0;background:#fff8e1;border:1.5px solid #ffe082;border-radius:10px;padding:18px 22px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#f57f17;margin-bottom:8px;">
+      Key distinction — Category vs Channel
+    </div>
+    <div style="font-size:13px;color:#444;line-height:1.7;">
+      <code style="background:#f5f5f5;padding:1px 6px;border-radius:4px;font-size:12px;">advertisingChannel = CRM</code> exists in <em>both</em> CorePilot and DSP — but they are different things.
+      In CorePilot it means "communication via CRM channels". In DSP it means "ad serving via CRM targeting with a budget and serving engine."
+      <br><br>
+      <strong>The fix:</strong> Add a <code style="background:#f5f5f5;padding:1px 6px;border-radius:4px;font-size:12px;">campaignCategory: Communication | Ad</code> field to the campaign model.
+      The app context sets this at creation time — CorePilot always creates <em>Communication</em>, DSP always creates <em>Ad</em>.
+      No user selection. No enum changes to <code style="background:#f5f5f5;padding:1px 6px;border-radius:4px;font-size:12px;">AdvertisingChannels</code>.
+    </div>
+  </div>
+
+  <div class="footer">
+    Coretava · Campaign Architecture Restructure · April 2026
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coretava — Campaign Architecture</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f1f5f9;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 32px;
+    }
+
+    /* ── outer container ──────────────────────────────── */
+    .canvas {
+      position: relative;
+      width: 1480px;
+      height: 1200px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* ── swimlane bg tints ────────────────────────────── */
+    .lane-left {
+      position: absolute;
+      top: 0; left: 0;
+      width: 718px; height: 100%;
+      background: #eff6ff18;
+      border-right: 2px dashed #93c5fd;
+    }
+    .lane-right {
+      position: absolute;
+      top: 0; right: 0;
+      width: 762px; height: 100%;
+      background: #fff7ed14;
+    }
+
+    /* ── SVG arrows overlay ───────────────────────────── */
+    .arrows {
+      position: absolute;
+      top: 0; left: 0;
+      width: 1480px; height: 1200px;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* ── all positioned elements ──────────────────────── */
+    .el {
+      position: absolute;
+      z-index: 30;
+    }
+
+    /* ── title bar ────────────────────────────────────── */
+    .title-bar {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.2px;
+    }
+    .title-sub {
+      font-size: 11px;
+      color: #94a3b8;
+      letter-spacing: 0.3px;
+      margin-top: 2px;
+    }
+
+    /* ── platform badge ───────────────────────────────── */
+    .platform-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 4px;
+    }
+    .badge-blue  { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+    .badge-orange{ background: #ffedd5; color: #c2410c; border: 1px solid #fdba74; }
+
+    /* ── section label ────────────────────────────────── */
+    .sec-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+
+    /* ── generic service box ──────────────────────────── */
+    .svc {
+      border-radius: 8px;
+      border: 2px solid;
+      padding: 10px 14px;
+    }
+    .svc .svc-title {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .svc .svc-file {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 9.5px;
+      opacity: 0.65;
+      margin-bottom: 6px;
+    }
+    .svc .svc-detail {
+      font-size: 10.5px;
+      color: #475569;
+      line-height: 1.55;
+    }
+
+    /* colours */
+    .svc-blue   { border-color: #3b82f6; background: #eff6ff; }
+    .svc-blue .svc-title { color: #1d4ed8; }
+
+    .svc-orange { border-color: #f97316; background: #fff7ed; }
+    .svc-orange .svc-title { color: #c2410c; }
+
+    .svc-purple { border-color: #8b5cf6; background: #f5f3ff; }
+    .svc-purple .svc-title { color: #6d28d9; }
+
+    .svc-slate  { border-color: #64748b; background: #f8fafc; }
+    .svc-slate .svc-title { color: #334155; }
+
+    .svc-green  { border-color: #22c55e; background: #f0fdf4; }
+    .svc-green .svc-title { color: #15803d; }
+
+    /* ── data store (cylinder-style) ─────────────────── */
+    .db-box {
+      border-radius: 8px;
+      border: 2px solid #475569;
+      padding: 12px 16px;
+      background: #f8fafc;
+    }
+    .db-box .db-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 2px;
+    }
+    .db-box .db-file {
+      font-family: 'SF Mono', monospace;
+      font-size: 9.5px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .db-box .db-field {
+      font-family: 'SF Mono', monospace;
+      font-size: 10px;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .db-box .db-field .k { color: #7c3aed; }
+    .db-box .db-field .v { color: #0369a1; }
+    .db-box .db-field .c { color: #94a3b8; }
+
+    /* ── execution column ─────────────────────────────── */
+    .exec-col {
+      border-radius: 8px;
+      border: 1.5px solid;
+      padding: 10px 12px;
+    }
+    .exec-col-blue   { border-color: #93c5fd; background: #f0f7ff; }
+    .exec-col-orange { border-color: #fdba74; background: #fffaf5; }
+    .exec-col-gray   { border-color: #cbd5e1; background: #f8fafc; }
+
+    .exec-col-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid;
+    }
+    .exec-col-blue .exec-col-title   { color: #1d4ed8; border-color: #bfdbfe; }
+    .exec-col-orange .exec-col-title { color: #c2410c; border-color: #fed7aa; }
+    .exec-col-gray .exec-col-title   { color: #475569; border-color: #e2e8f0; }
+
+    /* ── inline node row ──────────────────────────────── */
+    .node-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .node-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid;
+    }
+    .node-yes { background: #dcfce7; color: #15803d; border-color: #86efac; }
+    .node-no  { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+
+    /* ── bug / fix callout ────────────────────────────── */
+    .bug-callout {
+      border-radius: 6px;
+      border: 1.5px solid #ef4444;
+      background: #fef2f2;
+      padding: 8px 10px;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+    .bug-callout .bug-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #ef4444;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .fix-callout {
+      border-radius: 6px;
+      border: 1.5px solid #22c55e;
+      background: #f0fdf4;
+      padding: 8px 10px;
+      font-size: 10px;
+      line-height: 1.55;
+      margin-top: 6px;
+    }
+    .fix-callout .fix-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #15803d;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    /* ── arrow label ──────────────────────────────────── */
+    .arrow-label {
+      font-size: 9px;
+      font-family: 'SF Mono', monospace;
+      fill: #64748b;
+    }
+    .arrow-label-blue   { fill: #3b82f6; }
+    .arrow-label-orange { fill: #f97316; }
+
+    /* ── code inline ──────────────────────────────────── */
+    code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 9.5px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 3px;
+      padding: 1px 4px;
+      color: #7c3aed;
+    }
+
+    /* ── legend ───────────────────────────────────────── */
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      color: #64748b;
+    }
+    .legend-line {
+      width: 20px;
+      height: 2px;
+    }
+  </style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Swimlane backgrounds -->
+  <div class="lane-left"></div>
+  <div class="lane-right"></div>
+
+  <!-- ══ SVG ARROWS OVERLAY ══════════════════════════════════════ -->
+  <svg class="arrows" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="ah-gray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+      </marker>
+      <marker id="ah-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#3b82f6"/>
+      </marker>
+      <marker id="ah-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#f97316"/>
+      </marker>
+      <marker id="ah-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#8b5cf6"/>
+      </marker>
+      <marker id="ah-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#22c55e"/>
+      </marker>
+    </defs>
+
+    <!-- CorePilot UI → ecommerce-service -->
+    <polyline points="230,148 230,178 660,178 660,202"
+      fill="none" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah-blue)" stroke-dasharray="none"/>
+    <text x="310" y="172" class="arrow-label arrow-label-blue">campaignCategory=Communication</text>
+
+    <!-- DSP CRM UI → ecommerce-service -->
+    <polyline points="870,148 870,178 820,178 820,202"
+      fill="none" stroke="#f97316" stroke-width="1.5" marker-end="url(#ah-orange)"/>
+    <text x="880" y="172" class="arrow-label arrow-label-orange">campaignCategory=Ad</text>
+
+    <!-- DSP Meta/DV360 UI → ecommerce-service -->
+    <polyline points="1160,148 1160,178 870,178"
+      fill="none" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <!-- (joins the orange line above) -->
+
+    <!-- ecommerce-service → MongoDB -->
+    <line x1="740" y1="340" x2="740" y2="378"
+      stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#ah-purple)"/>
+    <text x="748" y="363" class="arrow-label" fill="#8b5cf6">persist</text>
+
+    <!-- MongoDB → CRM Communication column -->
+    <polyline points="520,488 520,518 230,518 230,548"
+      fill="none" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah-blue)"/>
+    <text x="270" y="513" class="arrow-label arrow-label-blue">Communication</text>
+
+    <!-- MongoDB → CRM Ad Campaign column -->
+    <polyline points="740,488 740,518 700,518 700,548"
+      fill="none" stroke="#f97316" stroke-width="1.5" marker-end="url(#ah-orange)"/>
+    <text x="750" y="513" class="arrow-label arrow-label-orange">Ad / CRM</text>
+
+    <!-- MongoDB → Meta/DV360 column -->
+    <polyline points="950,488 950,518 1160,518 1160,548"
+      fill="none" stroke="#f97316" stroke-width="1.5" marker-end="url(#ah-orange)" stroke-dasharray="4,2"/>
+    <text x="955" y="513" class="arrow-label arrow-label-orange">Ad / Meta · DV360</text>
+
+    <!-- CRM Comm: Trigger → crm-send -->
+    <line x1="230" y1="628" x2="230" y2="648"
+      stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+
+    <!-- crm-send → isContactEligible -->
+    <line x1="230" y1="728" x2="230" y2="748"
+      stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+
+    <!-- isContactEligible → flow execution -->
+    <line x1="230" y1="888" x2="230" y2="908"
+      stroke="#22c55e" stroke-width="1.5" marker-end="url(#ah-green)"/>
+
+    <!-- flow execution → node layer -->
+    <line x1="230" y1="958" x2="230" y2="978"
+      stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+
+    <!-- CRM Ad: cron → segment re-eval -->
+    <line x1="700" y1="648" x2="700" y2="668"
+      stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+
+    <!-- cron segment → node note -->
+    <line x1="700" y1="748" x2="700" y2="768"
+      stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+
+    <!-- Meta: serving → audience layers -->
+    <line x1="1160" y1="648" x2="1160" y2="668"
+      stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-gray)"/>
+  </svg>
+
+  <!-- ══ TITLE ══════════════════════════════════════════════════ -->
+  <div class="el" style="left:24px; top:16px;">
+    <div class="title-bar">Coretava — Campaign Architecture</div>
+    <div class="title-sub">System & Data Flow · April 2026 · Backend restructure proposal</div>
+  </div>
+
+  <!-- Legend -->
+  <div class="el" style="right:20px; top:18px;">
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-line" style="background:#3b82f6;"></div>
+        CRM Communication
+      </div>
+      <div class="legend-item">
+        <div class="legend-line" style="background:#f97316;"></div>
+        Ad Campaign
+      </div>
+      <div class="legend-item">
+        <div class="legend-line" style="background:#8b5cf6;"></div>
+        Shared infrastructure
+      </div>
+      <div class="legend-item">
+        <div class="legend-line" style="background:#ef4444;"></div>
+        Bug
+      </div>
+      <div class="legend-item">
+        <div class="legend-line" style="background:#22c55e;"></div>
+        Fix
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PLATFORM BADGES ════════════════════════════════════════ -->
+  <div class="el" style="left:40px; top:52px;">
+    <span class="platform-badge badge-blue">● CorePilot</span>
+  </div>
+  <div class="el" style="left:730px; top:52px;">
+    <span class="platform-badge badge-orange">● DSP / SSP</span>
+  </div>
+
+  <!-- ══ SECTION A LABEL ════════════════════════════════════════ -->
+  <div class="el" style="left:24px; top:80px;">
+    <div class="sec-label">A — Entry Points</div>
+  </div>
+
+  <!-- CorePilot UI -->
+  <div class="el" style="left:60px; top:95px; width:340px;">
+    <div class="svc svc-blue">
+      <div class="svc-title">CorePilot Campaign Builder</div>
+      <div class="svc-file">apps/dashboard/src/pages/corePilot/</div>
+      <div class="svc-detail">
+        Creates CRM Communication campaigns.<br>
+        Sets <code>campaignCategory = Communication</code>.<br>
+        No budget step. CRM Contact brain available.
+      </div>
+    </div>
+  </div>
+
+  <!-- DSP CRM UI -->
+  <div class="el" style="left:740px; top:95px; width:280px;">
+    <div class="svc svc-orange">
+      <div class="svc-title">DSP Builder — CRM channel</div>
+      <div class="svc-file">apps/dashboard/src/components/coreAds/dsp/</div>
+      <div class="svc-detail">
+        Sets <code>advertisingChannel = CRM</code>.<br>
+        Sets <code>campaignCategory = Ad</code>.<br>
+        Budget required.
+      </div>
+    </div>
+  </div>
+
+  <!-- DSP Meta/DV360 UI -->
+  <div class="el" style="left:1040px; top:95px; width:280px;">
+    <div class="svc svc-orange">
+      <div class="svc-title">DSP Builder — Meta / DV360</div>
+      <div class="svc-file">apps/dashboard/src/components/coreAds/dsp/</div>
+      <div class="svc-detail">
+        Sets <code>advertisingChannel = Meta | DV360</code>.<br>
+        Sets <code>campaignCategory = Ad</code>.<br>
+        No flow builder. IO / line items for DV360.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION B LABEL ════════════════════════════════════════ -->
+  <div class="el" style="left:24px; top:195px;">
+    <div class="sec-label">B — Core Service &amp; Data Model</div>
+  </div>
+
+  <!-- ecommerce-service -->
+  <div class="el" style="left:470px; top:210px; width:540px;">
+    <div class="svc svc-purple">
+      <div class="svc-title">ecommerce-service</div>
+      <div class="svc-file">services/ecommerce/src/campaigns/service.ts  ·  config/service.ts</div>
+      <div class="svc-detail" style="display:flex; gap:16px;">
+        <div style="flex:1;">
+          <strong style="font-size:10px; color:#6d28d9;">On creation</strong><br>
+          POST /api/campaigns<br>
+          Stores <code>campaignCategory</code><br>
+          Stores <code>advertisingChannel</code><br>
+          Stores <code>communicationChannels</code>
+        </div>
+        <div style="flex:1;">
+          <strong style="font-size:10px; color:#6d28d9;">On publish — <code>validatePublishCampaign()</code></strong><br>
+          <code>if campaignCategory = Ad</code> → require budget<br>
+          <code>if campaignCategory = Communication</code> → budget not required<br>
+          <span style="font-size:9px; color:#94a3b8;">service.ts ~line 919</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MongoDB -->
+  <div class="el" style="left:400px; top:385px; width:680px;">
+    <div class="db-box">
+      <div class="db-title">MongoDB — campaign_config collection</div>
+      <div class="db-file">services/ecommerce/src/campaigns/config/schema.ts  ·  CampaignConfigModel</div>
+      <div style="display:flex; gap:24px;">
+        <div class="db-field" style="flex:1;">
+          <span class="k">campaignCategory</span>: <span class="v">Communication | Ad</span> <span class="c">// NEW — proposed</span><br>
+          <span class="k">advertisingChannel</span>: <span class="v">CRM | Meta | DV360</span><br>
+          <span class="k">communicationChannels</span>: <span class="v">CommunicationChannels[]</span> <span class="c">// stored upfront</span><br>
+        </div>
+        <div class="db-field" style="flex:1;">
+          <span class="k">budget</span>: <span class="v">{ amount, currency }</span> <span class="c">// Ad only</span><br>
+          <span class="k">workflow</span>: <span class="v">{ id }</span><br>
+          <span class="k">segmentId</span> <span class="c">/ </span><span class="k">targetMembersConfig</span><br>
+          <span class="k">status</span>: <span class="v">Draft | Live | Paused | Ended</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION C LABEL ════════════════════════════════════════ -->
+  <div class="el" style="left:24px; top:508px;">
+    <div class="sec-label">C — Execution Flows</div>
+  </div>
+
+  <!-- ── CRM COMMUNICATION COLUMN ──────────────────────────── -->
+  <div class="el" style="left:20px; top:530px; width:450px; min-height:640px;">
+    <div class="exec-col exec-col-blue" style="min-height:640px;">
+      <div class="exec-col-title">
+        CRM Communication &nbsp;·&nbsp; <code style="font-size:9px; background:none; border:none; color:#1d4ed8;">campaignCategory = Communication</code>
+      </div>
+
+      <!-- Trigger types -->
+      <div class="svc svc-blue" style="margin-bottom:10px;">
+        <div class="svc-title">Trigger</div>
+        <div class="svc-detail">
+          <strong>Batch mode:</strong> Scheduled time → evaluate all contacts once<br>
+          <strong>Per-trigger mode:</strong> Contact event fires → evaluate that contact
+        </div>
+      </div>
+
+      <!-- crm-send service -->
+      <div class="svc svc-slate" style="margin-bottom:10px;">
+        <div class="svc-title">crm-send/service.ts</div>
+        <div class="svc-file">services/ecommerce/src/campaigns/crm-send/service.ts</div>
+        <div class="svc-detail">
+          Queues contacts for flow execution.<br>
+          Calls <code>isContactEligible(contact, communicationChannels)</code>
+        </div>
+      </div>
+
+      <!-- BUG / FIX -->
+      <div class="bug-callout" style="margin-bottom:6px;">
+        <div class="bug-label">🐛 Bug — line 243</div>
+        <code>if (!channels || channels.length === 0)</code><br>
+        <code>&nbsp;&nbsp;return !!contact.email; ← silently skips contacts without email</code><br>
+        <span style="color:#6b7280; font-size:9px; margin-top:4px; display:block;">Manage-contact-only flows fail for contacts with no email. No error thrown.</span>
+      </div>
+      <div class="fix-callout" style="margin-bottom:10px;">
+        <div class="fix-label">✓ Fix — one line</div>
+        <code>if (!channels || channels.length === 0)</code><br>
+        <code>&nbsp;&nbsp;return true; ← all contacts eligible</code><br>
+        <span style="color:#166534; font-size:9px; margin-top:4px; display:block;">Channel eligibility checked per message node at execution time.</span>
+      </div>
+
+      <!-- events-service -->
+      <div class="svc svc-slate" style="margin-bottom:10px;">
+        <div class="svc-title">Flow Execution — events-service</div>
+        <div class="svc-file">services/events/src/flows/actions/service.ts</div>
+        <div class="svc-detail">Executes flow nodes in order for each eligible contact.</div>
+      </div>
+
+      <!-- Node layer -->
+      <div style="font-size:10px; font-weight:600; color:#334155; margin-bottom:6px;">Available flow nodes:</div>
+      <div class="node-row">
+        <span class="node-chip node-yes">✓ Brain Node (CRM Contact)</span>
+        <span class="node-chip node-yes">✓ Manage Contact</span>
+        <span class="node-chip node-yes">✓ WhatsApp node</span>
+        <span class="node-chip node-yes">✓ Email node</span>
+        <span class="node-chip node-yes">✓ SMS node</span>
+      </div>
+      <div style="font-size:9px; color:#64748b; margin-top:6px; line-height:1.5;">
+        Brain node groups: within-group = OR · between-groups = AND<br>
+        <code>CrmConditionPanel.tsx</code> · <code>store.ts</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CRM AD CAMPAIGN COLUMN ─────────────────────────────── -->
+  <div class="el" style="left:490px; top:530px; width:450px;">
+    <div class="exec-col exec-col-orange" style="min-height:400px;">
+      <div class="exec-col-title">
+        CRM Ad Campaign &nbsp;·&nbsp; <code style="font-size:9px; background:none; border:none; color:#c2410c;">campaignCategory = Ad, advertisingChannel = CRM</code>
+      </div>
+
+      <!-- ads cron -->
+      <div class="svc svc-orange" style="margin-bottom:10px;">
+        <div class="svc-title">ads/cron.ts — scheduled cron</div>
+        <div class="svc-file">services/ecommerce/src/campaigns/ads/cron.ts</div>
+        <div class="svc-detail">
+          <code>@Cron(EVERY_11_HOURS)</code><br>
+          Fires every 11 hours. Fetches all <code>Live</code> DSP campaigns.
+        </div>
+      </div>
+
+      <!-- ads service -->
+      <div class="svc svc-slate" style="margin-bottom:10px;">
+        <div class="svc-title">ads/service.ts — handleScheduledAds()</div>
+        <div class="svc-file">services/ecommerce/src/campaigns/ads/service.ts</div>
+        <div class="svc-detail">
+          Iterates Live campaigns.<br>
+          Publishes <code>CampaignProcessedEvent</code> per retailer app.<br>
+          Segment re-evaluated from CRM data.
+        </div>
+      </div>
+
+      <!-- audience -->
+      <div class="svc svc-slate" style="margin-bottom:10px;">
+        <div class="svc-title">Audience — ecommerce segment builder</div>
+        <div class="svc-detail">
+          Demographics · RFM groups · Behavior · Purchase intent<br>
+          Stored as <code>targetMembersConfig / segmentGroups</code>
+        </div>
+      </div>
+
+      <!-- Node availability -->
+      <div style="font-size:10px; font-weight:600; color:#334155; margin-bottom:6px;">Flow node availability:</div>
+      <div class="node-row">
+        <span class="node-chip node-no">✗ CRM Contact brain</span>
+        <span class="node-chip node-no">✗ Manage Contact</span>
+        <span class="node-chip node-yes">✓ WhatsApp node</span>
+        <span class="node-chip node-yes">✓ Email node</span>
+        <span class="node-chip node-yes">✓ SMS node</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── META / DV360 COLUMN ────────────────────────────────── -->
+  <div class="el" style="left:960px; top:530px; width:450px;">
+    <div class="exec-col exec-col-orange" style="min-height:400px;">
+      <div class="exec-col-title">
+        Meta / DV360 &nbsp;·&nbsp; <code style="font-size:9px; background:none; border:none; color:#c2410c;">campaignCategory = Ad</code>
+      </div>
+
+      <!-- Meta -->
+      <div class="svc svc-orange" style="margin-bottom:10px;">
+        <div class="svc-title">Meta Ad Campaign</div>
+        <div class="svc-detail">
+          <strong>No flow builder.</strong> Direct campaign configuration.<br><br>
+          <strong>Audience — two layers:</strong><br>
+          (1) Native Meta audience config — fetched directly from Meta API<br>
+          (2) Ecommerce-filter custom audience — exported from segment builder to Meta<br><br>
+          <strong>Serving:</strong> Meta serving engine handles delivery.<br>
+          <strong>Tracking:</strong> Impressions · Delivery · Attribution
+        </div>
+      </div>
+
+      <!-- DV360 -->
+      <div class="svc svc-orange" style="margin-bottom:10px;">
+        <div class="svc-title">DV360</div>
+        <div class="svc-detail">
+          <strong>No flow builder.</strong> IO + Line Item configuration.<br><br>
+          Programmatic display. Insertion Order scoped per campaign.<br>
+          <strong>Tracking:</strong> Impressions · Delivery · Attribution
+        </div>
+      </div>
+
+      <!-- Node availability -->
+      <div style="font-size:10px; font-weight:600; color:#334155; margin-bottom:6px;">Flow nodes:</div>
+      <div class="node-row">
+        <span class="node-chip node-no">✗ No flow builder</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PROPOSED CHANGES CALLOUT ═══════════════════════════════ -->
+  <div class="el" style="left:20px; top:1130px; width:1440px;">
+    <div style="display:flex; gap:12px; align-items:stretch;">
+      <div style="flex:1; background:#f5f3ff; border:1.5px solid #8b5cf6; border-radius:8px; padding:10px 14px; font-size:10.5px; color:#334155; line-height:1.6;">
+        <strong style="color:#6d28d9; font-size:10px; letter-spacing:0.5px; text-transform:uppercase;">Ticket 1 — Add campaignCategory</strong><br>
+        Add <code>CampaignCategory &#123; Communication, Ad &#125;</code> enum + <code>campaignCategory</code> field to schema, DTO, request, mapper.<br>
+        <span style="color:#94a3b8; font-size:9px;">enums.ts · schema.ts · dto.ts · request.ts · types.ts · mapper.ts</span>
+      </div>
+      <div style="flex:1; background:#fef2f2; border:1.5px solid #ef4444; border-radius:8px; padding:10px 14px; font-size:10.5px; color:#334155; line-height:1.6;">
+        <strong style="color:#dc2626; font-size:10px; letter-spacing:0.5px; text-transform:uppercase;">Ticket 2 — Fix isContactEligible()</strong><br>
+        Change <code>return !!contact.email</code> → <code>return true</code> when no channels set.<br>
+        <span style="color:#94a3b8; font-size:9px;">crm-send/service.ts line 243 · unit tests in service.spec.ts</span>
+      </div>
+      <div style="flex:1; background:#f0fdf4; border:1.5px solid #22c55e; border-radius:8px; padding:10px 14px; font-size:10.5px; color:#334155; line-height:1.6;">
+        <strong style="color:#15803d; font-size:10px; letter-spacing:0.5px; text-transform:uppercase;">Ticket 3 — Budget validation by category</strong><br>
+        Replace advertisingChannel-based guard with <code>if campaignCategory = Ad → require budget</code>.<br>
+        <span style="color:#94a3b8; font-size:9px;">service.ts validatePublishCampaign() ~line 919 · depends on Ticket 1</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
