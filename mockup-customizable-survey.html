@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customizable Satisfaction Survey — UX Mockup</title>
+  <style>
+    /* =====================================================
+       Tokens (from frontend-monorepo/.../styles/tokens.css)
+       ===================================================== */
+    :root {
+      --accent: #ff8243;
+      --accent-2: #f36b3d;
+      --success: #16a34a;
+      --danger: #dc2626;
+
+      --text-strong: #0a192f;
+      --text-body: #4b5563;
+      --text-muted: #6b7280;
+      --text-faint: #9ca3af;
+
+      --bg-surface: #ffffff;
+      --bg-muted: #f9fafb;
+      --bg-icon-tile: #fff7ed;
+      --bg-page: #f0ece6;
+
+      --border-app: #f1ece8;
+      --border-card: #ececec;
+      --border-strong: #e3dfd8;
+
+      --radius-card: 12px;
+      --radius-modal: 14px;
+      --radius-pill: 999px;
+      --radius-input: 10px;
+      --radius-btn: 8px;
+
+      --shadow-card: 0 4px 16px rgba(10,25,47,0.04);
+      --shadow-modal: 0 12px 48px rgba(10,25,47,0.16);
+
+      /* survey-question type colors */
+      --q-binary-bg: #e0f4ee;
+      --q-binary-fg: #176a4e;
+      --q-rating-bg: #fff1cc;
+      --q-rating-fg: #946012;
+      --q-nps-bg: #dceefe;
+      --q-nps-fg: #2358a3;
+      --q-text-bg: #f1e9ff;
+      --q-text-fg: #6a3fb0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-strong);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 56px 32px 96px;
+    }
+
+    .page-header { text-align: center; margin-bottom: 48px; }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    .section { margin-bottom: 72px; }
+    .section-header { margin-bottom: 24px; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--bg-icon-tile);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+    .section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 6px;
+    }
+    .section .section-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 760px;
+      line-height: 1.55;
+    }
+
+    .surface-wrap { display: flex; justify-content: center; }
+
+    /* =====================================================
+       BUTTONS
+       ===================================================== */
+    .btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-btn);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-text {
+      background: transparent;
+      color: var(--text-body);
+    }
+    .btn-text:hover { background: var(--bg-muted); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent-2); }
+    .btn-secondary {
+      background: var(--bg-surface);
+      color: var(--text-body);
+      border: 1px solid var(--border-strong);
+    }
+    .btn-secondary:hover { background: var(--bg-muted); }
+
+    /* =====================================================
+       SURFACE 1 — Settings page (Surveys list)
+       ===================================================== */
+    .settings-page {
+      background: var(--bg-surface);
+      border-radius: var(--radius-modal);
+      width: 920px;
+      max-width: 100%;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-strong);
+      overflow: hidden;
+    }
+    .settings-head {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border-app);
+    }
+    .settings-head h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+    }
+    .settings-head p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .settings-body { padding: 22px 28px; }
+
+    .survey-row {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-card);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .survey-row.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,130,67,0.08);
+    }
+    .survey-row .row-icon {
+      width: 40px; height: 40px;
+      background: var(--bg-icon-tile);
+      border-radius: 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--accent-2);
+      flex-shrink: 0;
+    }
+    .survey-row .row-meta { flex: 1; min-width: 0; }
+    .survey-row .row-meta .row-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .survey-row .row-meta .row-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .survey-row .row-actions { flex-shrink: 0; display: flex; gap: 8px; }
+
+    .active-chip {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      background: var(--success);
+      color: #fff;
+    }
+    .default-chip {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-muted);
+      color: var(--text-muted);
+      border: 1px solid var(--border-strong);
+    }
+
+    .add-survey {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-card);
+      color: var(--accent-2);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      width: 100%;
+      justify-content: center;
+    }
+    .add-survey:hover { background: var(--bg-muted); }
+
+    /* =====================================================
+       SURFACE 2 — Survey builder (modal/page)
+       ===================================================== */
+    .builder {
+      background: var(--bg-muted);
+      border-radius: var(--radius-modal);
+      width: 1140px;
+      max-width: 100%;
+      box-shadow: var(--shadow-modal);
+      border: 1px solid var(--border-strong);
+      overflow: hidden;
+    }
+    .builder-head {
+      padding: 22px 28px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-app);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .builder-head h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-strong);
+    }
+    .builder-head .head-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 10px;
+    }
+    .builder-body {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 0;
+    }
+    .builder-form {
+      padding: 24px 28px;
+      border-right: 1px solid var(--border-app);
+    }
+    .builder-preview {
+      padding: 24px 24px;
+      background: #ece8e0;
+    }
+
+    .field-block { margin-bottom: 20px; }
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-strong);
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .text-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-input);
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--text-strong);
+    }
+    .text-input:focus { outline: none; border-color: var(--accent); }
+
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .question-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-card);
+      padding: 16px 18px;
+    }
+    .question-card .q-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .q-num {
+      width: 26px; height: 26px;
+      background: var(--bg-muted);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-strong);
+      flex-shrink: 0;
+    }
+    .q-type-chip {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .q-type-binary { background: var(--q-binary-bg); color: var(--q-binary-fg); }
+    .q-type-rating { background: var(--q-rating-bg); color: var(--q-rating-fg); }
+    .q-type-nps    { background: var(--q-nps-bg); color: var(--q-nps-fg); }
+    .q-type-text   { background: var(--q-text-bg); color: var(--q-text-fg); }
+
+    .q-required {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toggle {
+      width: 32px; height: 18px;
+      background: var(--accent);
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+    }
+    .toggle::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 14px; height: 14px;
+      background: #fff;
+      border-radius: 50%;
+    }
+    .toggle.off { background: var(--bg-muted); border: 1px solid var(--border-strong); }
+    .toggle.off::after { left: 2px; right: auto; }
+
+    .q-icon-btn {
+      width: 28px; height: 28px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 6px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .q-icon-btn:hover { background: var(--bg-muted); color: var(--text-strong); }
+
+    .q-text-input {
+      width: 100%;
+      background: var(--bg-muted);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-input);
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--text-strong);
+      margin-bottom: 10px;
+    }
+    .lang-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .lang-tab {
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      border-radius: 6px;
+      background: var(--bg-muted);
+      color: var(--text-muted);
+      border: 1px solid var(--border-card);
+      cursor: pointer;
+    }
+    .lang-tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .q-rule-chip {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .q-options { display: flex; flex-direction: column; gap: 6px; }
+    .q-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-body);
+    }
+    .q-option .opt-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-strong);
+      flex-shrink: 0;
+    }
+    .q-option .opt-text {
+      background: var(--bg-muted);
+      border-radius: 6px;
+      padding: 5px 10px;
+      flex: 1;
+    }
+
+    .q-nps-scale {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .q-nps-scale .scale-num {
+      width: 30px; height: 30px;
+      border-radius: 6px;
+      background: var(--bg-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-body);
+      border: 1px solid var(--border-card);
+    }
+    .q-nps-help {
+      font-size: 11px;
+      color: var(--text-faint);
+      margin-top: 8px;
+    }
+
+    .q-text-area {
+      background: var(--bg-muted);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-input);
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--text-faint);
+      font-style: italic;
+    }
+
+    .add-question {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-card);
+      background: transparent;
+      color: var(--accent-2);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    .add-question:hover { background: var(--bg-surface); }
+
+    /* Preview pane (WhatsApp message sequence) */
+    .preview-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .preview-phone {
+      background: #d9d6cf;
+      border-radius: 16px;
+      padding: 14px 12px 16px;
+      max-height: 720px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .wa-bubble {
+      background: #fff;
+      border-radius: 10px 10px 10px 2px;
+      padding: 10px 12px;
+      max-width: 88%;
+      font-size: 12px;
+      color: var(--text-strong);
+      line-height: 1.4;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+    .wa-bubble .wa-q {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .wa-bubble .wa-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #ece8e2;
+    }
+    .wa-bubble .wa-actions .wa-btn {
+      background: #f0f8ff;
+      color: #1a7ec2;
+      border-radius: 6px;
+      padding: 6px 10px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .wa-bubble .wa-actions.list .wa-btn {
+      background: var(--bg-muted);
+      color: var(--text-strong);
+      text-align: left;
+    }
+    .wa-meta {
+      font-size: 9px;
+      color: var(--text-faint);
+      text-align: right;
+      margin-top: 4px;
+    }
+    .wa-reply {
+      background: #d9f5d4;
+      border-radius: 10px 10px 2px 10px;
+      padding: 7px 12px;
+      max-width: 75%;
+      font-size: 12px;
+      color: var(--text-strong);
+      align-self: flex-end;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+    .wa-divider {
+      text-align: center;
+      font-size: 9px;
+      color: var(--text-muted);
+      padding: 6px 0;
+    }
+
+    /* =====================================================
+       SURFACE 3 — Conversation timeline view (completed survey)
+       ===================================================== */
+    .convo {
+      background: var(--bg-muted);
+      border-radius: var(--radius-modal);
+      width: 760px;
+      max-width: 100%;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-strong);
+      overflow: hidden;
+    }
+    .convo-head {
+      padding: 18px 22px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-app);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .convo-head .avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: #c3b5d9;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .convo-head .name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-strong);
+    }
+    .convo-head .sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .closed-chip {
+      margin-left: auto;
+      background: #fdecec;
+      color: #a02323;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.04em;
+    }
+
+    .convo-body {
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .system-pill {
+      align-self: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-pill);
+      padding: 6px 12px;
+      font-size: 11px;
+      color: var(--text-body);
+    }
+
+    .convo-outbound {
+      background: var(--bg-surface);
+      border-radius: 10px 10px 2px 10px;
+      padding: 10px 14px;
+      max-width: 70%;
+      font-size: 13px;
+      color: var(--text-strong);
+      align-self: flex-end;
+      box-shadow: var(--shadow-card);
+    }
+    .convo-outbound .from {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-2);
+      margin-bottom: 4px;
+    }
+    .convo-outbound .meta {
+      font-size: 10px;
+      color: var(--text-faint);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .convo-inbound {
+      background: var(--bg-surface);
+      border-radius: 10px 10px 10px 2px;
+      padding: 10px 14px;
+      max-width: 60%;
+      font-size: 13px;
+      color: var(--text-strong);
+      align-self: flex-start;
+      box-shadow: var(--shadow-card);
+    }
+    .convo-inbound .from {
+      font-size: 11px;
+      font-weight: 600;
+      color: #176a4e;
+      margin-bottom: 4px;
+    }
+    .convo-inbound .meta {
+      font-size: 10px;
+      color: var(--text-faint);
+      margin-top: 4px;
+    }
+
+    /* Summary card at the end */
+    .survey-summary {
+      align-self: flex-end;
+      background: linear-gradient(180deg, #fff9f3 0%, #ffffff 100%);
+      border: 1px solid #f3d99a;
+      border-radius: var(--radius-card);
+      padding: 14px 18px;
+      max-width: 95%;
+      box-shadow: var(--shadow-card);
+    }
+    .survey-summary .summary-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #946012;
+      margin-bottom: 12px;
+    }
+    .summary-row {
+      display: grid;
+      grid-template-columns: 26px 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-app);
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .sum-q { font-size: 12px; color: var(--text-body); line-height: 1.4; }
+    .summary-row .sum-a {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-strong);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .summary-row .sum-a.score { color: var(--accent-2); font-size: 14px; }
+
+    /* =====================================================
+       LEGEND
+       ===================================================== */
+    .legend {
+      background: var(--bg-surface);
+      border-radius: var(--radius-card);
+      padding: 22px 24px;
+      border: 1px solid var(--border-card);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .legend h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .legend .legend-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-app);
+      align-items: start;
+    }
+    .legend .legend-item:last-child { border-bottom: none; }
+    .legend .legend-num {
+      width: 22px; height: 22px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .legend .legend-text {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.55;
+    }
+    .legend .legend-text strong { color: var(--text-strong); }
+
+    .footnote {
+      font-size: 12px;
+      color: var(--text-muted);
+      max-width: 820px;
+      margin: 24px auto 0;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .anno {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px; height: 22px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(255,130,67,0.45);
+      z-index: 4;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="page-header">
+      <h1>Customizable Satisfaction Survey — UX Mockup</h1>
+      <p>One configurable multi-question survey per workspace. <strong>Primary delivery: WhatsApp Flow</strong> — a single in-WhatsApp form, one submit, no chatty per-question messages. Better UX, higher completion, no drop-off mid-sequence. Coexists with the default 5-star CSAT for workspaces without a custom survey. Conversational template sequence kept as a documented fallback only.</p>
+      <div style="margin-top: 18px; display: inline-flex; align-items: center; gap: 10px; background: #e0f5f1; border: 1px solid #00796b; color: #00796b; padding: 10px 18px; border-radius: 999px; font-size: 12px; font-weight: 600;">
+        <span style="font-size: 14px;">✅</span> Design decision: WhatsApp Flow · engineering to enable Meta capability if needed
+      </div>
+    </header>
+
+
+    <!-- ============================================
+         SURFACE 1 — Settings · Surveys list
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow">Surface 1 · Settings</span>
+        <h2>Workspace settings — Surveys</h2>
+        <p class="section-sub">Workspace admins see their current active survey, can build a new template, and switch between them. One survey is active at a time.</p>
+      </div>
+
+      <div class="surface-wrap">
+        <div class="settings-page">
+          <div class="settings-head">
+            <h3>Surveys</h3>
+            <p>Customize the satisfaction survey your customers receive over WhatsApp when a conversation closes.</p>
+          </div>
+          <div class="settings-body">
+
+            <!-- Active custom survey -->
+            <div class="survey-row active" style="position: relative;">
+              <span class="anno" style="left: -34px; top: 20px;">1</span>
+              <div class="row-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="row-meta">
+                <div class="row-title">
+                  Student Support Satisfaction
+                  <span class="active-chip">ACTIVE</span>
+                </div>
+                <div class="row-desc">4 questions · Yes/No · Multi-choice rating · NPS 0–10 · Free-text comment</div>
+              </div>
+              <div class="row-actions">
+                <button class="btn btn-secondary">Edit</button>
+              </div>
+            </div>
+
+            <!-- Default fallback -->
+            <div class="survey-row" style="position: relative;">
+              <span class="anno" style="left: -34px; top: 20px;">2</span>
+              <div class="row-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <div class="row-meta">
+                <div class="row-title">
+                  Default — 5-star rating
+                  <span class="default-chip">FALLBACK</span>
+                </div>
+                <div class="row-desc">1 question · Single rating bubble. Used when no custom survey is active. Cannot be edited.</div>
+              </div>
+              <div class="row-actions">
+                <button class="btn btn-secondary">Preview</button>
+              </div>
+            </div>
+
+            <button class="add-survey" style="margin-top: 8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Create new survey template
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================
+         SURFACE 1b — Empty state (fresh workspace)
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow">Surface 1b · Empty state</span>
+        <h2>Fresh workspace — no custom survey yet</h2>
+        <p class="section-sub">What a new admin sees on first visit. Only the default 5-star CSAT is in place. The empty-state CTA invites them to create their first custom survey.</p>
+      </div>
+
+      <div class="surface-wrap">
+        <div class="settings-page">
+          <div class="settings-head">
+            <h3>Surveys</h3>
+            <p>Customize the satisfaction survey your customers receive over WhatsApp when a conversation closes.</p>
+          </div>
+          <div class="settings-body">
+
+            <div class="survey-row active">
+              <div class="row-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <div class="row-meta">
+                <div class="row-title">
+                  Default — 5-star rating
+                  <span class="active-chip">ACTIVE</span>
+                </div>
+                <div class="row-desc">1 question · Platform default. In use everywhere until you create a custom survey.</div>
+              </div>
+              <div class="row-actions">
+                <button class="btn btn-secondary">Preview</button>
+              </div>
+            </div>
+
+            <div style="margin-top: 22px; padding: 32px 24px; background: var(--bg-icon-tile); border: 2px dashed #f3d99a; border-radius: var(--radius-card); text-align: center;">
+              <div style="font-size: 32px; margin-bottom: 10px;">📋</div>
+              <div style="font-size: 15px; font-weight: 700; color: var(--text-strong); margin-bottom: 6px;">Create your first custom survey</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.55;">Replace the 5-star rating with a tailored multi-question survey. Ask whatever matters most for your business — yes/no, ratings, NPS, free text comments.</div>
+              <button class="btn btn-primary">+ Create survey</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================
+         SURFACE 2 — Survey builder
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow">Surface 2 · Survey builder</span>
+        <h2>Survey builder — admin configures the survey</h2>
+        <p class="section-sub">Admin sets the survey name, configures the trigger / button / thank-you messages, and builds questions. The customer preview on the right shows how the survey appears as a WhatsApp Flow on the customer's device.</p>
+      </div>
+
+      <div class="surface-wrap">
+        <div class="builder">
+          <div class="builder-head">
+            <div>
+              <h3>Edit survey · Student Support Satisfaction</h3>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Last saved 2 days ago · 4 questions</div>
+            </div>
+            <div class="head-actions">
+              <button class="btn btn-text">Cancel</button>
+              <button class="btn btn-primary">Save survey</button>
+            </div>
+          </div>
+
+          <div class="builder-body">
+
+            <!-- LEFT: Questions form -->
+            <div class="builder-form">
+              <div class="field-block">
+                <label class="field-label">Survey name</label>
+                <input class="text-input" value="Student Support Satisfaction" />
+                <div style="font-size: 11px; color: var(--text-faint); margin-top: 6px;">Internal — not shown to customers.</div>
+              </div>
+
+              <div class="field-block" style="position: relative;">
+                <span class="anno" style="left: -34px; top: 0;">3</span>
+                <label class="field-label">Survey messages</label>
+                <div style="display: flex; flex-direction: column; gap: 14px; background: var(--bg-surface); border: 1px solid var(--border-card); border-radius: var(--radius-card); padding: 16px 18px;">
+
+                  <div>
+                    <div style="font-size: 11px; font-weight: 600; color: var(--text-strong); margin-bottom: 6px;">Trigger message <span style="color: var(--text-faint); font-weight: 500;">· the WhatsApp message that opens the Flow</span></div>
+                    <input class="text-input" value="Thanks for chatting with us! How did we do?" />
+                  </div>
+
+                  <div>
+                    <div style="font-size: 11px; font-weight: 600; color: var(--text-strong); margin-bottom: 6px;">Button label</div>
+                    <input class="text-input" style="max-width: 240px;" value="Take the survey" />
+                  </div>
+
+                  <div>
+                    <div style="font-size: 11px; font-weight: 600; color: var(--text-strong); margin-bottom: 6px;">Thank-you message <span style="color: var(--text-faint); font-weight: 500;">· shown in chat after submission</span></div>
+                    <input class="text-input" value="Thanks for your feedback!" />
+                  </div>
+
+                </div>
+              </div>
+
+              <label class="field-label" style="margin-top: 4px;">Questions</label>
+
+              <div class="questions-list">
+
+                <!-- Q1: Yes/No -->
+                <div class="question-card" style="position: relative;">
+                  <span class="anno" style="left: -34px; top: 16px;">3</span>
+                  <div class="q-head">
+                    <span class="q-num">1</span>
+                    <span class="q-type-chip q-type-binary">YES / NO</span>
+                    <span class="q-rule-chip">required</span>
+                    <button class="q-icon-btn" title="Delete" style="margin-left: auto;">🗑</button>
+                  </div>
+                  <input class="q-text-input" value="Was your issue or question resolved satisfactorily?" />
+                  <div class="q-options">
+                    <div class="q-option"><span class="opt-dot"></span><span class="opt-text">Yes</span></div>
+                    <div class="q-option"><span class="opt-dot"></span><span class="opt-text">No</span></div>
+                  </div>
+                </div>
+
+                <!-- Q2: Multi-choice rating -->
+                <div class="question-card">
+                  <div class="q-head">
+                    <span class="q-num">2</span>
+                    <span class="q-type-chip q-type-rating">RATING · 5-POINT</span>
+                    <span class="q-rule-chip">required</span>
+                    <button class="q-icon-btn" title="Delete" style="margin-left: auto;">🗑</button>
+                  </div>
+                  <input class="q-text-input" value="How would you rate the support provided regarding your inquiry?" />
+                  <div class="q-options">
+                    <div class="q-option"><span class="opt-dot"></span><span class="opt-text">Excellent</span></div>
+                    <div class="q-option"><span class="opt-dot"></span><span class="opt-text">Good</span></div>
+                    <div class="q-option"><span class="opt-dot"></span><span class="opt-text">Average</span></div>
+                    <div class="q-option"><span class="opt-dot"></span><span class="opt-text">Poor</span></div>
+                    <div class="q-option"><span class="opt-dot"></span><span class="opt-text">Very Poor</span></div>
+                  </div>
+                </div>
+
+                <!-- Q3: NPS -->
+                <div class="question-card">
+                  <div class="q-head">
+                    <span class="q-num">3</span>
+                    <span class="q-type-chip q-type-nps">NPS · 0–10</span>
+                    <span class="q-rule-chip">required</span>
+                    <button class="q-icon-btn" title="Delete" style="margin-left: auto;">🗑</button>
+                  </div>
+                  <input class="q-text-input" value="On a scale from 0 to 10, how likely are you to recommend Ítalo to a friend, colleague, or family member?" />
+                  <div class="q-nps-scale">
+                    <span class="scale-num">0</span><span class="scale-num">1</span><span class="scale-num">2</span><span class="scale-num">3</span><span class="scale-num">4</span><span class="scale-num">5</span><span class="scale-num">6</span><span class="scale-num">7</span><span class="scale-num">8</span><span class="scale-num">9</span><span class="scale-num">10</span>
+                  </div>
+                </div>
+
+                <!-- Q4: Free text (always optional) -->
+                <div class="question-card">
+                  <div class="q-head">
+                    <span class="q-num">4</span>
+                    <span class="q-type-chip q-type-text">FREE TEXT</span>
+                    <span class="q-rule-chip">optional</span>
+                    <button class="q-icon-btn" title="Delete" style="margin-left: auto;">🗑</button>
+                  </div>
+                  <input class="q-text-input" value="Would you like to leave a comment? Compliment, suggestion, or complaint." />
+                  <div class="q-text-area">Free text fields are always optional in v1. Customer can leave blank and still submit.</div>
+                </div>
+
+              </div>
+
+              <button class="add-question">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add question
+              </button>
+            </div>
+
+
+            <!-- RIGHT: WhatsApp preview -->
+            <div class="builder-preview">
+              <div class="preview-title" style="position: relative;">
+                <span class="anno" style="left: -32px; top: -2px;">4</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l5.06-1.36C8.56 21.5 10.23 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                Customer preview
+              </div>
+
+              <div class="preview-phone">
+                <div class="wa-divider">Conversation closed · 16:23</div>
+
+                <!-- Trigger message -->
+                <div>
+                  <div class="wa-bubble">
+                    <div class="wa-q">Thanks for chatting with us! How did we do?</div>
+                    <div style="font-size: 11px; color: var(--text-body); margin-top: 4px;">Tap below to share your feedback — takes about 30 seconds.</div>
+                    <div class="wa-actions">
+                      <div class="wa-btn" style="background: #00796b; color: #fff; font-weight: 700;">📋 Take the survey</div>
+                    </div>
+                  </div>
+                  <div class="wa-meta">16:23 · template + Flow CTA</div>
+                </div>
+
+                <div style="text-align: center; font-size: 10px; color: var(--text-muted); padding: 6px; font-style: italic;">↓ Customer taps · Flow form opens</div>
+
+                <!-- Realistic Flow form preview inside phone -->
+                <div style="background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,0.15); margin: 2px 0;">
+                  <!-- Flow header -->
+                  <div style="background: #00796b; color: #fff; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
+                    <button style="background: rgba(255,255,255,0.22); color: #fff; border: none; width: 22px; height: 22px; border-radius: 50%; font-size: 13px; cursor: pointer; line-height: 1;">×</button>
+                    <div style="font-size: 12px; font-weight: 700;">Student Support Survey</div>
+                  </div>
+                  <!-- Flow body -->
+                  <div style="padding: 14px 12px; display: flex; flex-direction: column; gap: 16px; background: #fafafa;">
+
+                    <!-- Q1 Yes/No: side-by-side -->
+                    <div>
+                      <div style="font-size: 11px; font-weight: 600; color: var(--text-strong); margin-bottom: 6px; line-height: 1.35;">1. Was your issue resolved satisfactorily?</div>
+                      <div style="display: flex; gap: 5px;">
+                        <div style="flex: 1; padding: 7px 8px; border: 1.5px solid #00796b; background: #e0f5f1; border-radius: 6px; font-size: 11px; color: var(--text-strong); font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                          <span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid #00796b; display: inline-flex; align-items: center; justify-content: center;"><span style="width: 4px; height: 4px; border-radius: 50%; background: #00796b;"></span></span>
+                          Yes
+                        </div>
+                        <div style="flex: 1; padding: 7px 8px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 11px; color: var(--text-muted); text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                          <span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border-strong);"></span>
+                          No
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Q2 Rating: stacked radios -->
+                    <div>
+                      <div style="font-size: 11px; font-weight: 600; color: var(--text-strong); margin-bottom: 6px; line-height: 1.35;">2. How would you rate the support?</div>
+                      <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <div style="padding: 6px 10px; border: 1.5px solid #00796b; background: #e0f5f1; border-radius: 5px; font-size: 11px; color: var(--text-strong); font-weight: 600; display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid #00796b; display: inline-flex; align-items: center; justify-content: center;"><span style="width: 4px; height: 4px; border-radius: 50%; background: #00796b;"></span></span>Excellent</div>
+                        <div style="padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: 5px; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border-strong);"></span>Good</div>
+                        <div style="padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: 5px; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border-strong);"></span>Average</div>
+                        <div style="padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: 5px; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border-strong);"></span>Poor</div>
+                        <div style="padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: 5px; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border-strong);"></span>Very Poor</div>
+                      </div>
+                    </div>
+
+                    <!-- Q3 NPS: scale -->
+                    <div>
+                      <div style="font-size: 11px; font-weight: 600; color: var(--text-strong); margin-bottom: 8px; line-height: 1.35;">3. How likely to recommend Ítalo? <span style="color: var(--text-faint); font-weight: 500;">(0–10)</span></div>
+                      <div style="display: flex; gap: 3px; justify-content: space-between;">
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">0</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">1</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">2</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">3</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">4</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">5</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">6</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">7</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">8</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: #00796b; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">9</span>
+                        <span style="width: 19px; height: 19px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted);">10</span>
+                      </div>
+                      <div style="display: flex; justify-content: space-between; font-size: 9px; color: var(--text-faint); margin-top: 6px;">
+                        <span>Not at all</span>
+                        <span>Extremely</span>
+                      </div>
+                    </div>
+
+                    <!-- Q4 Free text -->
+                    <div>
+                      <div style="font-size: 11px; font-weight: 600; color: var(--text-strong); margin-bottom: 6px; line-height: 1.35;">4. Anything else? <span style="color: var(--text-faint); font-weight: 500;">(optional)</span></div>
+                      <div style="background: #fff; border: 1px solid var(--border-strong); border-radius: 6px; padding: 8px 10px; font-size: 11px; color: var(--text-strong); min-height: 44px; line-height: 1.4;">The agent was super helpful, thanks!</div>
+                    </div>
+
+                    <button style="background: #00796b; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-top: 2px; cursor: pointer;">Submit survey</button>
+                  </div>
+                </div>
+
+                <div style="text-align: center; font-size: 10px; color: var(--text-muted); padding: 6px; font-style: italic;">↓ After submit</div>
+
+                <!-- Thank-you message -->
+                <div>
+                  <div class="wa-bubble">
+                    <div style="font-size: 12px;">Thanks for your feedback! 🙏</div>
+                  </div>
+                  <div class="wa-meta">16:25</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================
+         SURFACE 2b — Question type picker
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow">Surface 2b · Question type picker</span>
+        <h2>Adding a question — choose the type first</h2>
+        <p class="section-sub">When admin clicks "Add question" in the builder, this picker opens. Picking a type creates a new question card with that type's editor ready to go.</p>
+      </div>
+
+      <div class="surface-wrap">
+        <div style="background: var(--bg-surface); border-radius: var(--radius-modal); width: 720px; max-width: 100%; box-shadow: var(--shadow-modal); border: 1px solid var(--border-strong); padding: 26px 30px; position: relative;">
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--text-strong); margin-bottom: 4px;">Choose question type</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 22px;">Each type maps to a different input in the Flow form on the customer's side.</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-card); padding: 16px 18px; cursor: pointer; transition: border-color 0.15s;">
+              <div style="margin-bottom: 8px;">
+                <span class="q-type-chip q-type-binary">YES / NO</span>
+              </div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-strong); margin-bottom: 4px;">Binary choice</div>
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Best for confirmation questions like "Was your issue resolved?". Two-button picker in the Flow.</div>
+            </div>
+
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-card); padding: 16px 18px; cursor: pointer;">
+              <div style="margin-bottom: 8px;">
+                <span class="q-type-chip q-type-rating">RATING · 5-POINT</span>
+              </div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-strong); margin-bottom: 4px;">Multi-choice rating</div>
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">5-point satisfaction scale ("Excellent" → "Very Poor"). Same shape as today's default CSAT.</div>
+            </div>
+
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-card); padding: 16px 18px; cursor: pointer;">
+              <div style="margin-bottom: 8px;">
+                <span class="q-type-chip q-type-nps">NPS · 0–10</span>
+              </div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-strong); margin-bottom: 4px;">NPS scale</div>
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Standard 0–10 likelihood-to-recommend scale. Native scale picker in the Flow form.</div>
+            </div>
+
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-card); padding: 16px 18px; cursor: pointer;">
+              <div style="margin-bottom: 8px;">
+                <span class="q-type-chip q-type-text">FREE TEXT</span>
+              </div>
+              <div style="font-size: 13px; font-weight: 700; color: var(--text-strong); margin-bottom: 4px;">Free-text comment</div>
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Open-ended box for comments or suggestions. Always optional in v1 — customer can submit blank.</div>
+            </div>
+
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+            <button class="btn btn-text">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================
+         SURFACE 2 (VARIANT) — WhatsApp Flow delivery
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow" style="background: #e0f5f1; color: #00796b;">Surface 2c · Customer experience (detailed)</span>
+        <h2>Customer experience — full WhatsApp Flow walkthrough</h2>
+        <p class="section-sub">The same customer flow shown in the builder preview, in full detail. Trigger message arrives in chat → customer taps "Take the survey" → in-WhatsApp Flow form opens with all questions → customer submits once → thank-you message appears in chat.</p>
+      </div>
+
+      <div class="surface-wrap" style="display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
+
+        <!-- Phone 1: trigger message -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-faint); letter-spacing: 0.06em; text-transform: uppercase;">1 · Trigger message</div>
+          <div style="background: #d9d6cf; border-radius: 18px; padding: 16px 14px 18px; width: 300px;">
+            <div class="wa-divider">Conversation closed · 16:23</div>
+            <div class="wa-bubble">
+              <div class="wa-q">Thanks for chatting with us! How did we do?</div>
+              <div style="font-size: 11px; color: var(--text-body); margin-bottom: 6px; margin-top: 4px;">Tap below to share your feedback — takes about 30 seconds.</div>
+              <div class="wa-actions">
+                <div class="wa-btn" style="background: #00796b; color: #fff; font-weight: 700;">📋 Take the survey</div>
+              </div>
+            </div>
+            <div class="wa-meta">16:23 · template + Flow CTA</div>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div style="font-size: 32px; color: var(--text-faint); align-self: center; padding-top: 100px;">→</div>
+
+        <!-- Phone 2: Flow form opens -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-faint); letter-spacing: 0.06em; text-transform: uppercase;">2 · Flow form opens in WhatsApp</div>
+          <div style="background: #fff; border-radius: 18px; width: 320px; box-shadow: var(--shadow-modal); overflow: hidden; border: 1px solid var(--border-strong);">
+            <!-- Flow header -->
+            <div style="background: #00796b; color: #fff; padding: 14px 16px; display: flex; align-items: center; gap: 12px;">
+              <button style="background: rgba(255,255,255,0.2); color: #fff; border: none; width: 26px; height: 26px; border-radius: 50%; font-size: 16px; cursor: pointer; line-height: 1;">×</button>
+              <div style="font-size: 13px; font-weight: 700;">Student Support Survey</div>
+            </div>
+            <!-- Flow body -->
+            <div style="padding: 18px 16px; display: flex; flex-direction: column; gap: 18px; max-height: 620px; overflow-y: auto; background: #fafafa;">
+
+              <!-- Q1 Yes/No -->
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-strong); margin-bottom: 8px; line-height: 1.4;">1. Was your issue or question resolved satisfactorily?</label>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1.5px solid #00796b; border-radius: 8px; background: #e0f5f1; font-size: 12px; color: var(--text-strong); font-weight: 600;">
+                    <span style="width: 14px; height: 14px; border-radius: 50%; border: 2px solid #00796b; display: inline-flex; align-items: center; justify-content: center;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #00796b;"></span></span>
+                    Yes
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--border-strong); border-radius: 8px; font-size: 12px; color: var(--text-body);">
+                    <span style="width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border-strong);"></span>
+                    No
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q2 Rating -->
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-strong); margin-bottom: 8px; line-height: 1.4;">2. How would you rate the support?</label>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1.5px solid #00796b; border-radius: 8px; background: #e0f5f1; font-size: 12px; color: var(--text-strong); font-weight: 600;">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid #00796b; display: inline-flex; align-items: center; justify-content: center;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #00796b;"></span></span>
+                    Excellent
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--border-strong); border-radius: 8px; font-size: 12px; color: var(--text-body);"><span style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--border-strong);"></span>Good</div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--border-strong); border-radius: 8px; font-size: 12px; color: var(--text-body);"><span style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--border-strong);"></span>Average</div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--border-strong); border-radius: 8px; font-size: 12px; color: var(--text-body);"><span style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--border-strong);"></span>Poor</div>
+                  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--border-strong); border-radius: 8px; font-size: 12px; color: var(--text-body);"><span style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--border-strong);"></span>Very Poor</div>
+                </div>
+              </div>
+
+              <!-- Q3 NPS native scale -->
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-strong); margin-bottom: 10px; line-height: 1.4;">3. How likely to recommend Ítalo? <span style="color: var(--text-faint); font-weight: 500;">(0–10)</span></label>
+                <div style="display: flex; gap: 4px; justify-content: space-between;">
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">0</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">1</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">2</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">3</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">4</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">5</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">6</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">7</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">8</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: #00796b; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">9</span>
+                  <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted);">10</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 9px; color: var(--text-faint); margin-top: 8px;">
+                  <span>Not at all likely</span>
+                  <span>Extremely likely</span>
+                </div>
+              </div>
+
+              <!-- Q4 free text -->
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-strong); margin-bottom: 8px; line-height: 1.4;">4. Anything else? <span style="font-weight: 500; color: var(--text-faint);">(optional)</span></label>
+                <div style="background: #fff; border: 1px solid var(--border-strong); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--text-strong); min-height: 60px; line-height: 1.5;">The agent was super helpful, thanks!</div>
+              </div>
+
+              <button style="background: #00796b; color: #fff; border: none; padding: 13px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; margin-top: 6px; cursor: pointer; width: 100%;">Submit survey</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Comparison table -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-card); border-radius: var(--radius-card); padding: 22px 26px; max-width: 960px; margin: 36px auto 0;">
+        <h4 style="font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 14px; color: var(--text-strong);">Conversational templates vs WhatsApp Flow</h4>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align: left; padding: 10px 8px; font-size: 10px; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--border-app);"></th>
+              <th style="text-align: left; padding: 10px 8px; font-size: 10px; color: var(--accent-2); letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--border-app);">Conversational</th>
+              <th style="text-align: left; padding: 10px 8px; font-size: 10px; color: #00796b; letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--border-app);">WhatsApp Flow</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 10px 8px; font-size: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-app);">Customer experience</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">Series of chat messages — chatty, can feel like spam</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">Single in-WhatsApp form — feels intentional, professional</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 8px; font-size: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-app);">Messages sent</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">5+ (one per question; NPS needs 2)</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">1 trigger + the Flow itself</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 8px; font-size: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-app);">NPS 0–10</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">Awkward — split into 2 list messages (10-row cap)</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">Native scale on a single screen</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 8px; font-size: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-app);">Editing the survey</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">Each question change needs Meta re-approval (24h+)</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">One Flow approval; question wording can change without re-approval</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 8px; font-size: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-app);">Drop-off risk</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">Higher — customer can stop mid-sequence; partial responses</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-app);">All-or-nothing submit — cleaner data, no partials</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 8px; font-size: 12px; font-weight: 600; color: var(--text-strong);">Engineering effort</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body);">Template-per-question + multi-message response collection</td>
+              <td style="padding: 10px 8px; font-size: 12px; color: var(--text-body);">One Flow JSON spec + one webhook with all responses</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="footnote">
+        <strong>Open question for Mohammed / Khaled:</strong> does our WhatsApp Business API account have Flows enabled? Is the current 5-star CSAT delivered via approved template buttons or via a Flow? If Flows are available, this is almost certainly the path we should take — better UX, less Meta overhead, cleaner data.
+      </p>
+    </section>
+
+
+    <!-- ============================================
+         SURFACE 3 — Conversation timeline (Coretava view)
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow">Surface 3 · Inside Conversations</span>
+        <h2>Survey appears inline in the closed conversation thread</h2>
+        <p class="section-sub">The rep / manager sees each question + customer response rendered in-thread (same pattern as today's 5-star CSAT), with a summary card at the end so the result is readable at a glance.</p>
+      </div>
+
+      <div class="surface-wrap">
+        <div class="convo">
+          <div class="convo-head">
+            <div class="avatar">RM</div>
+            <div>
+              <div class="name">Rawan Maaouia</div>
+              <div class="sub">Assigned to rawan+statustest@coretava.com</div>
+            </div>
+            <span class="closed-chip">CLOSED</span>
+          </div>
+
+          <div class="convo-body">
+            <!-- Pre-survey close pill -->
+            <div class="system-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+              rawan+statustest closed the conversation — Resolved
+            </div>
+
+            <!-- Survey trigger message (outbound) -->
+            <div class="convo-outbound">
+              <div class="from">Survey trigger</div>
+              Thanks for chatting with us! How did we do? Tap below to share your feedback — takes about 30 seconds.
+              <div style="display: inline-block; margin-top: 8px; padding: 6px 14px; background: var(--bg-icon-tile); color: var(--accent-2); border-radius: 6px; font-size: 11px; font-weight: 700;">📋 Take the survey</div>
+              <div class="meta">16:23 ✓✓</div>
+            </div>
+
+            <!-- System events: sent + completed -->
+            <div class="system-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Satisfaction Survey sent · 16:23
+            </div>
+
+            <div class="system-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Satisfaction Survey completed · 16:25
+            </div>
+
+            <!-- Summary card -->
+            <div class="survey-summary" style="position: relative;">
+              <span class="anno" style="left: -34px; top: 16px;">5</span>
+              <div class="summary-head">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                SATISFACTION SURVEY — COMPLETED
+              </div>
+
+              <div class="summary-row">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Q1</div>
+                <div class="sum-q">Was your issue or question resolved satisfactorily?</div>
+                <div class="sum-a">Yes</div>
+              </div>
+              <div class="summary-row">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Q2</div>
+                <div class="sum-q">How would you rate the support?</div>
+                <div class="sum-a">Excellent</div>
+              </div>
+              <div class="summary-row">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Q3</div>
+                <div class="sum-q">NPS — Likelihood to recommend Ítalo</div>
+                <div class="sum-a score">9/10</div>
+              </div>
+              <div class="summary-row">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Q4</div>
+                <div class="sum-q">Comment</div>
+                <div class="sum-a" style="white-space: normal; max-width: 220px; font-weight: 500; color: var(--text-body);">"The agent was super helpful, thanks!"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================
+         Legend + Notes
+         ============================================ -->
+    <section class="section">
+      <div class="legend">
+        <h4>What's new in this design</h4>
+
+        <div class="legend-item">
+          <span class="legend-num">1</span>
+          <div class="legend-text">
+            <strong>Active custom survey row</strong> — clearly marks the active template with an ACTIVE chip. Description shows question count + types so admins know what their customers are getting without opening the builder.
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">2</span>
+          <div class="legend-text">
+            <strong>Default fallback row</strong> — the existing 5-star CSAT stays available as a read-only fallback. Workspaces that never create a custom template keep their current behaviour. Cannot be edited (it's the platform default).
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">3</span>
+          <div class="legend-text">
+            <strong>Per-question card (MVP-trimmed)</strong> — type chip + required/optional rule chip (rule is fixed: free text is always optional, all others required), language tabs (EN / PT-BR / ES) for admin question text, type-specific options editor, single Delete action. No reorder arrows in v1 (delete + re-add to change order). Option labels and UI strings auto-translate to the customer's app language.
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">4</span>
+          <div class="legend-text">
+            <strong>Live WhatsApp preview</strong> — shows the customer's view as a sequence of template messages with their expected responses. Critical for admins to see how their long survey actually plays out on the customer's side before committing.
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">5</span>
+          <div class="legend-text">
+            <strong>Survey summary card</strong> in the conversation thread — same role as today's 5-star bubble but multi-row. One glance to read all four answers without scrolling the question/response pairs above. Designed to scan quickly for managers / QA.
+          </div>
+        </div>
+
+      </div>
+
+      <p class="footnote">
+        <strong>Key WhatsApp constraint to call out in the ticket:</strong> WhatsApp templates have UI limits (max 3 reply buttons, list messages capped at 10 rows). NPS 0–10 (11 options) needs to be split into two list-message templates (0–5 and 6–10), as shown in the preview. Each question type also requires its own Meta-approved template — admins can't change question text or options after Meta approves without re-submitting for review (24h+).
+      </p>
+    </section>
+
+  </div>
+</body>
+</html>
