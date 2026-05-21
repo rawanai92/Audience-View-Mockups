@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WhatsApp Templates — UX Mockup v4</title>
+  <style>
+    /* =====================================================
+       Tokens (from frontend-monorepo/.../styles/tokens.css)
+       ===================================================== */
+    :root {
+      --accent: #ff8243;
+      --accent-2: #f36b3d;
+      --success: #16a34a;
+      --danger: #dc2626;
+
+      --text-strong: #0a192f;
+      --text-body: #4b5563;
+      --text-muted: #6b7280;
+      --text-faint: #9ca3af;
+
+      --bg-surface: #ffffff;
+      --bg-muted: #f9fafb;
+      --bg-icon-tile: #fff7ed;
+      --bg-page: #f0ece6;
+
+      --border-app: #f1ece8;
+      --border-card: #ececec;
+      --border-strong: #e3dfd8;
+
+      --radius-card: 12px;
+      --radius-modal: 14px;
+      --radius-pill: 999px;
+      --radius-input: 10px;
+      --radius-btn: 8px;
+
+      --shadow-modal: 0 12px 48px rgba(10, 25, 47, 0.16);
+      --shadow-menu: 0 6px 24px rgba(10, 25, 47, 0.12);
+
+      /* source colors */
+      --src-conv-bg: #ebe4ff;
+      --src-conv-fg: #5a3aaa;
+      --src-camp-bg: #ffe8d6;
+      --src-camp-fg: #a8480f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-strong);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 56px 32px 96px;
+    }
+
+    /* ----- Page Header ----- */
+    .page-header { text-align: center; margin-bottom: 48px; }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    /* ----- Section ----- */
+    .section { margin-bottom: 72px; }
+    .section-header { margin-bottom: 24px; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--bg-icon-tile);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+    .section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 6px;
+    }
+    .section .section-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 720px;
+      line-height: 1.55;
+    }
+
+    /* =====================================================
+       MODAL (shared)
+       ===================================================== */
+    .modal {
+      background: var(--bg-muted);
+      border-radius: var(--radius-modal);
+      width: 880px;
+      max-width: 100%;
+      box-shadow: var(--shadow-modal);
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+    }
+
+    .modal-header {
+      padding: 22px 28px 18px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-app);
+      position: relative;
+    }
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+    }
+    .modal-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px; right: 22px;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .modal-close:hover { background: var(--bg-muted); color: var(--text-strong); }
+
+    .modal-body { padding: 20px 28px 20px; }
+    .modal-footer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-app);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .modal-footer .footer-info {
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .modal-footer .right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+
+    /* =====================================================
+       FILTERS
+       ===================================================== */
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .search {
+      flex: 1;
+      min-width: 240px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-input);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .pill {
+      padding: 7px 13px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--text-body);
+      transition: all 0.15s;
+    }
+    .pill.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .pill:not(.active):hover { background: var(--bg-muted); }
+
+    /* Source filter row */
+    .source-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px dashed var(--border-strong);
+      position: relative;
+    }
+    .source-row .source-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+    .source-pill {
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--text-body);
+    }
+    .source-pill.active {
+      background: var(--text-strong);
+      color: #fff;
+      border-color: var(--text-strong);
+    }
+
+    /* =====================================================
+       CARD GRID (Conversations)
+       ===================================================== */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-card);
+      padding: 16px 16px 14px;
+      border: 1px solid var(--border-card);
+      position: relative;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .card:hover {
+      border-color: var(--border-strong);
+      box-shadow: 0 2px 12px rgba(10,25,47,0.04);
+    }
+
+    /* Top row holds: category chip · status chip · kebab (next to status, no border) */
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .cat-chip {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .cat-marketing { background: #f1e9ff; color: #6a3fb0; }
+    .cat-utility { background: #fff1cc; color: #946012; }
+    .cat-auth { background: #dceefe; color: #2358a3; }
+
+    .cat-chip .check {
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: var(--success);
+      color: #fff;
+      font-size: 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    .status-chip {
+      margin-left: auto;
+      background: #d8f5e3;
+      color: #136b3a;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.04em;
+    }
+    .status-chip.pending { background: #fff1cc; color: #946012; }
+    .status-chip.rejected { background: #fde2e2; color: #a02323; }
+
+    /* Borderless three-dot kebab, sits right after status chip */
+    .kebab {
+      width: 24px; height: 24px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: color 0.12s, background 0.12s;
+    }
+    .kebab:hover {
+      color: var(--text-strong);
+      background: var(--bg-muted);
+    }
+    .kebab svg { display: block; }
+
+    /* Kebab menu */
+    .kebab-menu {
+      position: absolute;
+      top: 48px;
+      right: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      box-shadow: var(--shadow-menu);
+      padding: 6px;
+      z-index: 5;
+      min-width: 170px;
+    }
+    .kebab-menu .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text-body);
+      cursor: pointer;
+    }
+    .kebab-menu .menu-item:hover { background: var(--bg-muted); }
+    .kebab-menu .menu-item.danger { color: var(--danger); }
+    .kebab-menu .menu-item.danger:hover { background: #fdecec; }
+
+    .card-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-preview {
+      background: var(--bg-muted);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-body);
+      line-height: 1.5;
+      min-height: 60px;
+      margin-bottom: 12px;
+    }
+    .card-preview .var {
+      background: var(--bg-icon-tile);
+      color: var(--accent-2);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+    .card-cta-row { display: flex; align-items: center; gap: 8px; }
+    .use-cta {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-btn);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .use-cta:hover { background: var(--accent-2); }
+    .use-cta.disabled {
+      background: var(--bg-muted);
+      color: var(--text-faint);
+      cursor: not-allowed;
+    }
+
+    /* =====================================================
+       BUTTONS
+       ===================================================== */
+    .btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-btn);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s;
+    }
+    .btn-text {
+      background: transparent;
+      color: var(--text-body);
+    }
+    .btn-text:hover { background: var(--bg-muted); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent-2); }
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-danger:hover { background: #b91c1c; }
+
+    /* =====================================================
+       SURFACE 2 — Campaigns dropdown
+       ===================================================== */
+    .form-frame {
+      background: var(--bg-surface);
+      border-radius: var(--radius-modal);
+      width: 640px;
+      max-width: 100%;
+      padding: 24px 28px 22px;
+      border: 1px solid var(--border-strong);
+      box-shadow: 0 4px 16px rgba(10,25,47,0.04);
+      position: relative;
+    }
+    .form-frame .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-2);
+      margin-bottom: 8px;
+    }
+    .dropdown-trigger {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 2px solid var(--accent);
+      border-radius: var(--radius-input);
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer;
+    }
+    .dropdown-trigger .caret {
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    .dropdown-panel {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      top: 92px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-input);
+      box-shadow: var(--shadow-menu);
+      padding: 10px;
+      z-index: 5;
+      max-height: 480px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dropdown-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-input);
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .dropdown-filters {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 2px 10px;
+      border-bottom: 1px solid var(--border-app);
+      margin-bottom: 6px;
+    }
+    .dropdown-filters .source-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+    .dropdown-filters .source-pill {
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+
+    .dropdown-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .dropdown-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-strong);
+      transition: background 0.12s;
+    }
+    .dropdown-item:hover { background: var(--bg-muted); }
+
+    .dropdown-item .item-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .dropdown-item .item-name {
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .dropdown-item .item-status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      flex-shrink: 0;
+    }
+
+    /* SOURCE PILL — matches house pill language */
+    .source-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      flex-shrink: 0;
+    }
+    .source-tag.conversations {
+      background: var(--src-conv-bg);
+      color: var(--src-conv-fg);
+    }
+    .source-tag.campaigns {
+      background: var(--src-camp-bg);
+      color: var(--src-camp-fg);
+    }
+
+    .below-field {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border-strong);
+    }
+    .toggle-row { display: flex; align-items: center; gap: 14px; }
+    .toggle-pill {
+      width: 56px; height: 28px;
+      background: var(--bg-muted);
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      display: inline-flex;
+      align-items: center;
+      padding: 3px;
+    }
+    .toggle-pill::before {
+      content: "";
+      width: 20px; height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .toggle-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-strong);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .toggle-optional {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-left: 6px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .warning-line {
+      margin-top: 22px;
+      padding: 12px 14px;
+      background: #fff8e6;
+      border: 1px solid #f3d99a;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #946012;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    /* =====================================================
+       Confirm dialogs (two states)
+       ===================================================== */
+    .confirm {
+      background: var(--bg-surface);
+      border-radius: var(--radius-modal);
+      width: 420px;
+      max-width: 100%;
+      padding: 24px;
+      box-shadow: var(--shadow-modal);
+      border: 1px solid var(--border-strong);
+      position: relative;
+    }
+    .confirm h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 8px;
+    }
+    .confirm p {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+    .confirm .actions {
+      display: flex; justify-content: flex-end; gap: 10px;
+    }
+
+    /* Blocked state visual */
+    .blocked-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 12px;
+    }
+    .blocked-icon-tile {
+      width: 36px; height: 36px;
+      background: #fdecec;
+      border-radius: 10px;
+      color: var(--danger);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .blocked-list {
+      background: var(--bg-muted);
+      border: 1px solid var(--border-app);
+      border-radius: 10px;
+      padding: 6px;
+      margin-bottom: 18px;
+    }
+    .blocked-list .blocked-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 10px;
+      font-size: 13px;
+      color: var(--text-strong);
+      border-radius: 6px;
+    }
+    .blocked-list .blocked-item + .blocked-item { border-top: 1px solid var(--border-app); }
+    .blocked-list .blocked-item .icon {
+      width: 22px; height: 22px;
+      border-radius: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-app);
+      color: var(--text-muted);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .blocked-list .blocked-item .meta { flex: 1; min-width: 0; }
+    .blocked-list .blocked-item .meta .title {
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .blocked-list .blocked-item .meta .sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .blocked-list .blocked-item .link {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-2);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    /* =====================================================
+       Annotations + legend
+       ===================================================== */
+    .anno {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px; height: 22px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(255,130,67,0.45);
+      z-index: 4;
+    }
+
+    .legend {
+      background: var(--bg-surface);
+      border-radius: var(--radius-card);
+      padding: 22px 24px;
+      border: 1px solid var(--border-card);
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    .legend h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .legend .legend-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-app);
+      align-items: start;
+    }
+    .legend .legend-item:last-child { border-bottom: none; }
+    .legend .legend-num {
+      width: 22px; height: 22px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .legend .legend-text {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.55;
+    }
+    .legend .legend-text strong { color: var(--text-strong); }
+
+    .surface-wrap { display: flex; justify-content: center; }
+
+    .twin-confirm {
+      display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; align-items: flex-start;
+    }
+    .twin-confirm .col { flex: 0 0 auto; }
+    .twin-confirm .col-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .footnote {
+      font-size: 12px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 24px auto 0;
+      line-height: 1.55;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="page-header">
+      <h1>WhatsApp Templates — UX Mockup v4</h1>
+      <p>Two existing surfaces, lightly improved. Borderless kebab next to status. Source as pills. Delete dialog has two states: allowed (simple) and blocked when the template is actively in use.</p>
+    </header>
+
+
+    <!-- ============================================
+         SURFACE 1 — Conversations Template Picker
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow">Surface 1 · Conversations</span>
+        <h2>Template picker — modal</h2>
+        <p class="section-sub">Existing card-based picker. Adds source filter at the top + borderless three-dot kebab next to the status chip for Delete.</p>
+      </div>
+
+      <div class="surface-wrap" style="position: relative;">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Template library</h3>
+            <p>Select a pre-approved WhatsApp template to send to your contact.</p>
+            <button class="modal-close" aria-label="Close">×</button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Search + category filters (unchanged) -->
+            <div class="filter-row">
+              <div class="search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/></svg>
+                Search templates (e.g. Order update)…
+              </div>
+              <div class="pill active">All</div>
+              <div class="pill">Marketing</div>
+              <div class="pill">Utility</div>
+              <div class="pill">Authentication</div>
+            </div>
+
+            <!-- Source filter row -->
+            <div class="source-row">
+              <span class="anno" style="left: -34px; top: 6px;">1</span>
+              <span class="source-label">Source</span>
+              <div class="source-pill active">All</div>
+              <div class="source-pill">Conversations</div>
+              <div class="source-pill">Campaigns</div>
+            </div>
+
+            <!-- Card grid -->
+            <div class="grid">
+
+              <!-- Card 1 -->
+              <div class="card">
+                <div class="card-top">
+                  <span class="cat-chip cat-marketing">MARKETING <span class="check">✓</span></span>
+                  <span class="status-chip">APPROVED</span>
+                  <button class="kebab" aria-label="More actions">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                  </button>
+                </div>
+                <div class="card-name">order_update_v2</div>
+                <div class="card-preview">
+                  Hi <span class="var">{{1}}</span>, your order <span class="var">{{2}}</span> is on its way. Track it here: <span class="var">{{3}}</span>
+                </div>
+                <div class="card-cta-row">
+                  <button class="use-cta">Use this template →</button>
+                </div>
+              </div>
+
+              <!-- Card 2: kebab menu shown OPEN -->
+              <div class="card" style="position: relative;">
+                <span class="anno" style="right: -10px; top: -10px;">2</span>
+                <div class="card-top">
+                  <span class="cat-chip cat-utility">UTILITY <span class="check">✓</span></span>
+                  <span class="status-chip">APPROVED</span>
+                  <button class="kebab" aria-label="More actions" style="color: var(--text-strong); background: var(--bg-muted);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                  </button>
+                </div>
+                <div class="kebab-menu">
+                  <div class="menu-item danger">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                    Delete template
+                  </div>
+                </div>
+                <div class="card-name">welcome_v3</div>
+                <div class="card-preview">
+                  Hi <span class="var">{{1}}</span>, welcome to ICB Hair Clinic. Which of our services are you interested in?
+                </div>
+                <div class="card-cta-row">
+                  <button class="use-cta">Use this template →</button>
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="card">
+                <div class="card-top">
+                  <span class="cat-chip cat-marketing">MARKETING</span>
+                  <span class="status-chip pending">PENDING</span>
+                  <button class="kebab" aria-label="More actions">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                  </button>
+                </div>
+                <div class="card-name">summer_promo_2026</div>
+                <div class="card-preview">
+                  Hi <span class="var">{{1}}</span>, our summer offer is live. Use code SUMMER26 for 30% off any service.
+                </div>
+                <div class="card-cta-row">
+                  <button class="use-cta disabled">Awaiting Meta approval</button>
+                </div>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="card">
+                <div class="card-top">
+                  <span class="cat-chip cat-auth">AUTHENTICATION <span class="check">✓</span></span>
+                  <span class="status-chip">APPROVED</span>
+                  <button class="kebab" aria-label="More actions">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                  </button>
+                </div>
+                <div class="card-name">otp_login</div>
+                <div class="card-preview">
+                  Your one-time code is <span class="var">{{1}}</span>. It expires in 10 minutes.
+                </div>
+                <div class="card-cta-row">
+                  <button class="use-cta">Use this template →</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <span class="footer-info">ℹ️ Templates are pre-approved by Meta. Changes can take up to 24h.</span>
+            <div class="right">
+              <button class="btn btn-text">Cancel</button>
+              <button class="btn btn-primary">Create new template</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================
+         SURFACE 2 — Campaigns Template Dropdown
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow">Surface 2 · Campaigns</span>
+        <h2>Template dropdown — list</h2>
+        <p class="section-sub">Existing "Reuse an existing template" field. Adds a source filter at the top of the panel + a source pill and borderless kebab on each list item.</p>
+      </div>
+
+      <div class="surface-wrap" style="position: relative;">
+        <div class="form-frame">
+          <label class="field-label">Reuse an existing template (optional)</label>
+          <div class="dropdown-trigger">
+            Pick an APPROVED template to reuse
+            <span class="caret">▲</span>
+          </div>
+
+          <div class="dropdown-panel">
+            <div class="dropdown-search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/></svg>
+              Search by name…
+            </div>
+
+            <div class="dropdown-filters" style="position: relative;">
+              <span class="anno" style="left: -32px; top: 0px;">3</span>
+              <span class="source-label">Source</span>
+              <div class="source-pill active">All</div>
+              <div class="source-pill">Conversations</div>
+              <div class="source-pill">Campaigns</div>
+            </div>
+
+            <div class="dropdown-list">
+
+              <div class="dropdown-item">
+                <div class="item-meta">
+                  <span class="item-status-dot"></span>
+                  <span class="item-name">order_update_v2</span>
+                </div>
+                <span class="source-tag conversations">CONVERSATIONS</span>
+                <button class="kebab" aria-label="More actions">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                </button>
+              </div>
+
+              <div class="dropdown-item" style="position: relative;">
+                <span class="anno" style="right: -10px; top: 50%; transform: translateY(-50%);">4</span>
+                <div class="item-meta">
+                  <span class="item-status-dot"></span>
+                  <span class="item-name">welcome_v3</span>
+                </div>
+                <span class="source-tag conversations">CONVERSATIONS</span>
+                <button class="kebab" aria-label="More actions" style="color: var(--text-strong); background: var(--bg-muted);">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                </button>
+              </div>
+
+              <div class="dropdown-item">
+                <div class="item-meta">
+                  <span class="item-status-dot"></span>
+                  <span class="item-name">vip_onboarding_step1</span>
+                </div>
+                <span class="source-tag campaigns">CAMPAIGNS</span>
+                <button class="kebab" aria-label="More actions">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                </button>
+              </div>
+
+              <div class="dropdown-item">
+                <div class="item-meta">
+                  <span class="item-status-dot"></span>
+                  <span class="item-name">otp_login</span>
+                </div>
+                <span class="source-tag conversations">CONVERSATIONS</span>
+                <button class="kebab" aria-label="More actions">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                </button>
+              </div>
+
+              <div class="dropdown-item">
+                <div class="item-meta">
+                  <span class="item-status-dot"></span>
+                  <span class="item-name">winback_30d_v1</span>
+                </div>
+                <span class="source-tag campaigns">CAMPAIGNS</span>
+                <button class="kebab" aria-label="More actions">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <div style="height: 380px;"></div>
+
+          <div class="below-field">
+            <div class="toggle-row">
+              <div class="toggle-pill"></div>
+              <span class="toggle-label">BUTTON <span class="toggle-optional">Optional</span></span>
+            </div>
+
+            <div class="warning-line">
+              <span>⚠️</span>
+              <span>Once submitted, this message cannot be edited. Please review carefully before saving.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================
+         Shared — Delete confirmation (two states)
+         ============================================ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-eyebrow">Shared · Both surfaces</span>
+        <h2>Delete confirmation — two states</h2>
+        <p class="section-sub">Built on the existing <code>ConfirmDialog</code> component (<code>apps/web/src/features/contacts/components/ConfirmDialog/</code>) with <code>destructive: true</code>. Two behaviour states based on whether the template is currently referenced by anything we can't gracefully reconfigure. State B uses a plain Dialog (single CTA, no destructive action).</p>
+      </div>
+
+      <div class="twin-confirm">
+
+        <!-- State A: Allowed -->
+        <div class="col">
+          <div class="col-label">State A · Allowed</div>
+          <div class="confirm">
+            <span class="anno" style="left: -34px; top: 6px;">5</span>
+            <h3>Delete welcome_v3?</h3>
+            <p>It will be removed from your library. Draft campaigns using it will be marked unconfigured until you swap in another template.</p>
+            <div class="actions">
+              <button class="btn btn-text">Cancel</button>
+              <button class="btn btn-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- State B: Blocked -->
+        <div class="col">
+          <div class="col-label">State B · Blocked (in use)</div>
+          <div class="confirm">
+            <span class="anno" style="left: -34px; top: 6px;">6</span>
+            <div class="blocked-header">
+              <div class="blocked-icon-tile">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div>
+                <h3 style="margin: 0;">welcome_v3 is in use</h3>
+              </div>
+            </div>
+            <p>Remove it from these places first, then try again.</p>
+            <div class="blocked-list">
+              <div class="blocked-item">
+                <div class="icon">🚀</div>
+                <div class="meta">
+                  <div class="title">Spring promo</div>
+                  <div class="sub">Active campaign · Step 3</div>
+                </div>
+                <a class="link" href="#">Open →</a>
+              </div>
+              <div class="blocked-item">
+                <div class="icon">⏰</div>
+                <div class="meta">
+                  <div class="title">Scheduled message to Maria S.</div>
+                  <div class="sub">Tomorrow at 9:00 AM</div>
+                </div>
+                <a class="link" href="#">Open →</a>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn btn-primary">Got it</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============================================
+         Legend
+         ============================================ -->
+    <section class="section">
+      <div class="legend">
+        <h4>What's new in this mockup</h4>
+
+        <div class="legend-item">
+          <span class="legend-num">1</span>
+          <div class="legend-text">
+            <strong>Source filter row in Conversations picker</strong> — new secondary filter under the category pills. Uses the existing <code>origin</code> field on <code>WhatsappTemplateDto</code>.
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">2</span>
+          <div class="legend-text">
+            <strong>Borderless kebab next to the status chip</strong> — three clear dots, no box around it. Subtle until hover, where it picks up a soft tile. One action today: Delete. Scales to Edit / Duplicate later. Available on every card regardless of status, so users can clean up rejected / pending templates too.
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">3</span>
+          <div class="legend-text">
+            <strong>Source filter row in Campaigns dropdown</strong> — same pills as Surface 1, inside the dropdown panel above the list. Consistent behaviour across both surfaces.
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">4</span>
+          <div class="legend-text">
+            <strong>Per-item source pill + kebab in the Campaigns dropdown</strong> — source labelled as a small pill on each row (matches the house pill language). Same borderless kebab as Surface 1 for Delete.
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">5</span>
+          <div class="legend-text">
+            <strong>Delete — allowed state</strong> — fires when the template is referenced only by past <em>Sent</em> messages, by composer state (ephemeral, not persisted), or by <em>Draft</em> campaigns. Short copy, two-line dialog. Calls out the draft-campaign behaviour (node marks itself unconfigured — existing UX) so the user knows what happens to in-flight work, without scare copy.
+          </div>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-num">6</span>
+          <div class="legend-text">
+            <strong>Delete — blocked state</strong> — fires when the template is referenced by:
+            <br>· a <em>Scheduled</em> Conversations message (status=Scheduled with a future <code>scheduledFor</code>), or
+            <br>· any non-Draft campaign (PendingApproval / Live / Scheduled / Expired / etc.).
+            <br><br>The campaign backend hard-rejects all edits to non-Draft campaigns, so the user literally can't swap the template — we must block. Dialog lists every blocker with a direct "Open →" link. Draft campaigns don't trigger this state.
+          </div>
+        </div>
+
+      </div>
+
+      <p class="footnote">
+        <strong>Composer fallback</strong> (separate from deletion, handled in the composer not this dialog): if the user has a template selected in the composer (ephemeral React state) and someone else deletes it, the next Send attempt shows an inline error — "This template was deleted. Pick another or create one." This isn't a deletion-time blocker because the selection isn't persisted server-side.
+        <br><br>
+        <strong>Historical Sent messages:</strong> not a blocker. Engineering note: the message body should be snapshotted at send time so historical conversation views don't break when a template is later deleted.
+        <br><br>
+        <strong>Open question for refinement (still):</strong> should Delete also remove the template from Meta's side, or only from our library? App-library only is the simpler v1; Meta-side cleanup can come later.
+      </p>
+    </section>
+
+  </div>
+</body>
+</html>
