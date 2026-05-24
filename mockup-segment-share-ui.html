@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Segment Sharing — UI Polish Mockup</title>
+  <style>
+    :root {
+      --accent: #ff8243;
+      --accent-2: #f36b3d;
+      --accent-soft: #fff1e7;
+      --success: #16a34a;
+      --danger: #dc2626;
+
+      --text-strong: #0a192f;
+      --text-body: #4b5563;
+      --text-muted: #6b7280;
+      --text-faint: #9ca3af;
+
+      --bg-surface: #ffffff;
+      --bg-muted: #f9fafb;
+      --bg-icon-tile: #fff7ed;
+      --bg-page: #f0ece6;
+
+      --border-app: #f1ece8;
+      --border-card: #ececec;
+      --border-strong: #e3dfd8;
+
+      --radius-card: 12px;
+      --radius-modal: 14px;
+      --radius-pill: 999px;
+      --radius-input: 10px;
+      --radius-btn: 8px;
+
+      --shadow-card: 0 4px 16px rgba(10,25,47,0.04);
+      --shadow-modal: 0 12px 48px rgba(10,25,47,0.16);
+
+      --soft-purple-bg: #efe9ff;
+      --soft-purple-fg: #5a45b8;
+      --soft-orange-bg: #ffe7d6;
+      --soft-orange-fg: #b8551a;
+      --soft-blue-bg: #e0f0ff;
+      --soft-blue-fg: #2358a3;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-strong);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 56px 32px 96px;
+    }
+
+    .page-header { text-align: center; margin-bottom: 48px; }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    .section { margin-bottom: 72px; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--bg-icon-tile);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+    .section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .section .sub {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .frame {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-modal);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+    }
+    .frame-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .frame-label.before { color: var(--danger); }
+    .frame-label.after { color: var(--success); }
+
+    /* ----- BEFORE ----- */
+    .fieldset-broken {
+      border: 1px solid #e3dfd8;
+      border-radius: 8px;
+      padding: 24px 20px;
+      margin: 0;
+      position: relative;
+    }
+    .fieldset-broken legend {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      padding: 0 6px;
+      margin-left: 8px;
+    }
+    .opt-broken {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 20px 18px;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+    .opt-broken.selected {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+    .opt-broken .radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #cdc8c0;
+      flex-shrink: 0;
+      margin-top: 2px;
+      position: relative;
+    }
+    .opt-broken.selected .radio {
+      border-color: var(--accent);
+    }
+    .opt-broken.selected .radio::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .opt-broken .opt-text strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .opt-broken .opt-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .checkbox-broken {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-muted);
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+    .checkbox-broken .cb {
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .checkbox-broken .cb-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .checkbox-broken .cb-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ----- AFTER ----- */
+    .share-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .share-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .opt-good {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .opt-good:hover { border-color: var(--border-strong); }
+    .opt-good.selected {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+    .opt-good .radio {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid #cdc8c0;
+      flex-shrink: 0;
+      margin-top: 2px;
+      position: relative;
+    }
+    .opt-good.selected .radio {
+      border-color: var(--accent);
+    }
+    .opt-good.selected .radio::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .opt-good .opt-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .opt-good .opt-text p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .checkbox-good {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-top: 14px;
+      background: var(--bg-muted);
+    }
+    .checkbox-good .cb {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--accent);
+      border-radius: 4px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .checkbox-good .cb-text strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .checkbox-good .cb-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* annotation pins */
+    .annotations {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border-card);
+    }
+    .ann {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .ann-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--danger);
+      color: white;
+      font-weight: 700;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ann-num.after { background: var(--success); }
+    .ann-text { color: var(--text-body); }
+    .ann-text strong { color: var(--text-strong); }
+
+    /* picker section */
+    .picker-frame {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .picker-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+      padding: 10px;
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--accent-soft);
+      color: var(--accent-2);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .chip .x { font-size: 11px; opacity: 0.6; cursor: pointer; }
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .user-row:hover { background: var(--bg-muted); }
+    .user-row .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #cdc8c0;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .user-row .user-name {
+      font-size: 13px;
+      flex: 1;
+    }
+    .user-row .user-email {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* success modal — matches the contact-created system-wide pattern */
+    .success-modal {
+      background: var(--bg-surface);
+      border-radius: var(--radius-modal);
+      box-shadow: var(--shadow-modal);
+      max-width: 520px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 22px 22px 22px;
+      background: var(--bg-muted);
+      position: relative;
+    }
+    .modal-icon-tile {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: var(--bg-icon-tile);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .modal-icon-tile svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--accent-2);
+      stroke-width: 2.4;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .modal-header-text { flex: 1; min-width: 0; }
+    .modal-header-text h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .modal-header-text p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1.5px solid var(--accent);
+      background: var(--bg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-2);
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .modal-body {
+      padding: 22px 22px 4px;
+    }
+    .modal-confirm-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .modal-confirm-line .green-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid var(--success);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .modal-confirm-line strong {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-strong);
+    }
+    .detail-card {
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 14px 18px;
+      background: var(--bg-surface);
+    }
+    .detail-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 0;
+    }
+    .detail-row + .detail-row {
+      border-top: 1px solid var(--border-card);
+    }
+    .detail-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      min-width: 110px;
+    }
+    .detail-value {
+      font-size: 14px;
+      color: var(--text-strong);
+      font-weight: 500;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 22px;
+    }
+    .btn {
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius-btn);
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-secondary {
+      background: var(--bg-surface);
+      color: var(--text-body);
+      border-color: var(--border-card);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* segment cards */
+    .seg-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .seg-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-card);
+      padding: 18px;
+    }
+    .seg-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .seg-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      background: var(--bg-muted);
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+    .seg-type {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+    }
+    .seg-type.dynamic {
+      background: var(--soft-purple-bg);
+      color: var(--soft-purple-fg);
+    }
+    .seg-type.static {
+      background: var(--soft-orange-bg);
+      color: var(--soft-orange-fg);
+    }
+    .seg-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .seg-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .seg-count-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .seg-count {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-2);
+    }
+
+    /* filter chip with type */
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px 6px 12px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      color: var(--accent-2);
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .filter-chip-eyebrow {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .filter-chip-type {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      margin-left: 4px;
+    }
+    .filter-chip-type.dynamic {
+      background: var(--soft-purple-bg);
+      color: var(--soft-purple-fg);
+    }
+    .filter-chip-type.static {
+      background: var(--soft-orange-bg);
+      color: var(--soft-orange-fg);
+    }
+    .filter-chip .x { opacity: 0.5; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <h1>Segment Sharing — UI Polish</h1>
+      <p>Five small fixes to align the Create Segment dialog with the rest of the app's design system, plus a couple of related signals that are missing today.</p>
+    </header>
+
+    <!-- ====== Section 1: Share With block ====== -->
+    <section class="section">
+      <div class="section-eyebrow">Fix 1</div>
+      <h2>"Share with" block — clean up & align with the design system</h2>
+      <p class="sub">Today's fieldset, padding, and checkbox don't match the rest of the app. The "Everyone in workspace" description copy also says "every admin" when it should say "every user." Proposed cleanup below.</p>
+
+      <div class="compare">
+        <!-- BEFORE -->
+        <div class="frame">
+          <div class="frame-label before">Before — what ships today</div>
+          <fieldset class="fieldset-broken">
+            <legend>SHARE WITH</legend>
+            <div class="opt-broken selected">
+              <span class="radio"></span>
+              <div class="opt-text">
+                <strong>Only me</strong>
+                <p>You'll be the only person who can see this segment.</p>
+              </div>
+            </div>
+            <div class="opt-broken">
+              <span class="radio"></span>
+              <div class="opt-text">
+                <strong>Specific users</strong>
+                <p>Pick teammates who should also see this segment.</p>
+              </div>
+            </div>
+            <div class="opt-broken">
+              <span class="radio"></span>
+              <div class="opt-text">
+                <strong>Queue</strong>
+                <p>Everyone assigned to one of these queues will see the segment.</p>
+              </div>
+            </div>
+            <div class="opt-broken">
+              <span class="radio"></span>
+              <div class="opt-text">
+                <strong>Everyone in workspace</strong>
+                <p>Every <em>admin</em> in your workspace will see this segment.</p>
+              </div>
+            </div>
+            <div class="checkbox-broken">
+              <span class="cb">✓</span>
+              <div class="cb-text">
+                <strong>Also share matching contacts</strong>
+                <p>People in the audience above will also be able to see all contacts that match this segment.</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="annotations">
+            <div class="ann"><span class="ann-num">1</span><span class="ann-text"><strong>Fieldset legend</strong> sits inside a border that crashes through the "SHARE WITH" label on the left.</span></div>
+            <div class="ann"><span class="ann-num">2</span><span class="ann-text"><strong>Excessive vertical padding</strong> on each radio card — twice the spacing of comparable lists in the app.</span></div>
+            <div class="ann"><span class="ann-num">3</span><span class="ann-text"><strong>Checkbox style mismatch</strong> — filled-orange square with white check feels heavier than the radio buttons above it.</span></div>
+            <div class="ann"><span class="ann-num">4</span><span class="ann-text"><strong>Misleading copy</strong> on "Everyone in workspace" — says "every admin" when it should be "every user."</span></div>
+          </div>
+        </div>
+
+        <!-- AFTER -->
+        <div class="frame">
+          <div class="frame-label after">After — proposed</div>
+          <div class="share-block">
+            <div class="share-label">Share with</div>
+            <div class="opt-good selected">
+              <span class="radio"></span>
+              <div class="opt-text">
+                <strong>Only me</strong>
+                <p>You'll be the only person who can see this segment.</p>
+              </div>
+            </div>
+            <div class="opt-good">
+              <span class="radio"></span>
+              <div class="opt-text">
+                <strong>Specific users</strong>
+                <p>Pick teammates who should also see this segment.</p>
+              </div>
+            </div>
+            <div class="opt-good">
+              <span class="radio"></span>
+              <div class="opt-text">
+                <strong>Queue</strong>
+                <p>Everyone assigned to the selected queues will see this segment.</p>
+              </div>
+            </div>
+            <div class="opt-good">
+              <span class="radio"></span>
+              <div class="opt-text">
+                <strong>Everyone in workspace</strong>
+                <p>Every <em>user</em> in your workspace will see this segment.</p>
+              </div>
+            </div>
+            <div class="checkbox-good">
+              <span class="cb">✓</span>
+              <div class="cb-text">
+                <strong>Also share matching contacts</strong>
+                <p>People in the audience above can also see and act on contacts that match this segment.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="annotations">
+            <div class="ann"><span class="ann-num after">1</span><span class="ann-text">Remove the fieldset border. Use a plain caps label ("SHARE WITH") above the options — same pattern as other sections in the app.</span></div>
+            <div class="ann"><span class="ann-num after">2</span><span class="ann-text">Tighter row padding (12px vertical) — matches the existing list-row density.</span></div>
+            <div class="ann"><span class="ann-num after">3</span><span class="ann-text">Checkbox uses the same size and visual weight as the radios above it. Light fill on the row matches the muted-row pattern used elsewhere for the toggle.</span></div>
+            <div class="ann"><span class="ann-num after">4</span><span class="ann-text">Copy fixed to "Every user in your workspace will see this segment."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== Section 2: Unknown user → email fallback ====== -->
+    <section class="section">
+      <div class="section-eyebrow">Fix 2</div>
+      <h2>Specific users picker — fall back to email when name is missing</h2>
+      <p class="sub">Some accounts are created via email before they complete signup, so they have no display name yet. Today the picker shows "Unknown user" for those — which looks like a bug and provides no way to identify them. Render the email until a name is collected.</p>
+
+      <div class="compare">
+        <!-- BEFORE -->
+        <div class="frame">
+          <div class="frame-label before">Before</div>
+          <div class="picker-frame">
+            <div class="picker-label">Selected</div>
+            <div class="chips">
+              <span class="chip">Unknown user <span class="x">×</span></span>
+              <span class="chip">Unknown user <span class="x">×</span></span>
+              <span class="chip">Unknown user <span class="x">×</span></span>
+            </div>
+            <div class="picker-label">Available users</div>
+            <div class="user-row"><span class="checkbox"></span><span class="user-name">Maram Maher</span><span class="user-email">maram+5@coretava.com</span></div>
+            <div class="user-row"><span class="checkbox"></span><span class="user-name">Maram</span><span class="user-email">maram+salesrep@coretava.com</span></div>
+            <div class="user-row"><span class="checkbox"></span><span class="user-name" style="color:#9ca3af;">Unknown user</span><span class="user-email">—</span></div>
+          </div>
+          <div class="annotations">
+            <div class="ann"><span class="ann-num">1</span><span class="ann-text">"Unknown user" gives the picker user no signal at all — they can't pick this person or know who they are.</span></div>
+          </div>
+        </div>
+
+        <!-- AFTER -->
+        <div class="frame">
+          <div class="frame-label after">After — proposed</div>
+          <div class="picker-frame">
+            <div class="picker-label">Selected</div>
+            <div class="chips">
+              <span class="chip">jordan+new@coretava.com <span class="x">×</span></span>
+              <span class="chip">cleo+invited@coretava.com <span class="x">×</span></span>
+            </div>
+            <div class="picker-label">Available users</div>
+            <div class="user-row"><span class="checkbox"></span><span class="user-name">Maram Maher</span><span class="user-email">maram+5@coretava.com</span></div>
+            <div class="user-row"><span class="checkbox"></span><span class="user-name">Maram</span><span class="user-email">maram+salesrep@coretava.com</span></div>
+            <div class="user-row"><span class="checkbox"></span><span class="user-name">jordan+new@coretava.com</span><span class="user-email"></span></div>
+          </div>
+          <div class="annotations">
+            <div class="ann"><span class="ann-num after">1</span><span class="ann-text">When <code>name</code> is empty/missing, render the email as the user's display value in both the chip and the row.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== Section 3: Save confirmation ====== -->
+    <section class="section">
+      <div class="section-eyebrow">Fix 3</div>
+      <h2>Save confirmation — success modal on segment create</h2>
+      <p class="sub">Save currently fires silently. Use the same success modal pattern as the contact-creation flow so the user gets an explicit confirmation of what was created and who it was shared with.</p>
+
+      <div class="frame" style="padding: 48px 28px;">
+        <div class="success-modal">
+          <div class="modal-header">
+            <div class="modal-icon-tile">
+              <svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 8"></polyline></svg>
+            </div>
+            <div class="modal-header-text">
+              <h3>Segment created</h3>
+            </div>
+            <button class="modal-close" aria-label="Close">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="detail-card">
+              <div class="detail-row">
+                <span class="detail-label">Name</span>
+                <span class="detail-value">High-intent leads — Q4</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Type</span>
+                <span class="detail-value">
+                  <span class="seg-type dynamic" style="font-size: 10px;">Dynamic</span>
+                </span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Shared with</span>
+                <span class="detail-value">Rawan Queue · 4 members</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Matching contacts</span>
+                <span class="detail-value">42 contacts</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary">Close</button>
+            <button class="btn btn-primary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              View segment
+            </button>
+          </div>
+        </div>
+
+        <div class="annotations" style="margin-top: 32px;">
+          <div class="ann"><span class="ann-num after">1</span><span class="ann-text">Same shape as the system-wide "Contact created" modal — header tile + title + sub-line + close X, body with green-check confirm line + detail card, footer with secondary "Close" + primary "View segment".</span></div>
+          <div class="ann"><span class="ann-num after">2</span><span class="ann-text">Header subtitle adapts to the share mode:
+            <em>"… shared with the Rawan Queue"</em> for Queue,
+            <em>"… shared with Maram, Sofia"</em> for Specific users,
+            <em>"… shared with everyone in your workspace"</em> for Workspace,
+            <em>"… visible only to you"</em> for Only me.</span></div>
+          <div class="ann"><span class="ann-num after">3</span><span class="ann-text">Detail card surfaces what the user just chose: name, type (Dynamic / Static), share target, and the resulting match count. Easy at-a-glance verification.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== Section 4: Dynamic / Static indicator ====== -->
+    <section class="section">
+      <div class="section-eyebrow">Fix 4</div>
+      <h2>Dynamic vs Static — visible everywhere the segment lives</h2>
+      <p class="sub">Today, there's no way to tell whether a segment is dynamic (auto-updates) or static (snapshot) from the list view or the filter chip on Contacts. Add a small type badge on the segment card and on the filter chip.</p>
+
+      <h3 style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px;">On the segment cards</h3>
+      <div class="seg-cards">
+        <div class="seg-card">
+          <div class="seg-card-header">
+            <span class="seg-tag">Contact list</span>
+            <span class="seg-type dynamic">Dynamic</span>
+          </div>
+          <div class="seg-name">High-intent leads — Q4</div>
+          <div class="seg-desc">Tags has "Hot lead" · Last activity &lt; 7 days</div>
+          <div class="seg-count-label">Total contacts</div>
+          <div class="seg-count">42</div>
+        </div>
+        <div class="seg-card">
+          <div class="seg-card-header">
+            <span class="seg-tag">Contact list</span>
+            <span class="seg-type static">Static</span>
+          </div>
+          <div class="seg-name">May launch outreach</div>
+          <div class="seg-desc">Snapshot — May 14, 2026</div>
+          <div class="seg-count-label">Total contacts</div>
+          <div class="seg-count">128</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 14px; font-weight: 600; color: var(--text-muted); margin: 32px 0 12px;">On the Contacts filter chip</h3>
+      <div style="text-align: center;">
+        <span class="filter-chip">
+          <span class="filter-chip-eyebrow">Segment</span>
+          High-intent leads — Q4
+          <span class="filter-chip-type dynamic">Dynamic</span>
+          <span class="x">×</span>
+        </span>
+        &nbsp;&nbsp;
+        <span class="filter-chip">
+          <span class="filter-chip-eyebrow">Segment</span>
+          May launch outreach
+          <span class="filter-chip-type static">Static</span>
+          <span class="x">×</span>
+        </span>
+      </div>
+
+      <div class="annotations" style="margin-top: 28px;">
+        <div class="ann"><span class="ann-num after">1</span><span class="ann-text">Two badge styles: <strong>Dynamic</strong> (soft purple) and <strong>Static</strong> (soft orange) — reuses the source-pill color language already established in the WhatsApp templates work.</span></div>
+        <div class="ann"><span class="ann-num after">2</span><span class="ann-text">Mirrored on the filter chip on the Contacts table — same label, smaller font.</span></div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
