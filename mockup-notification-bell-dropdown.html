@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Header Bell — Notification Dropdown Mockup</title>
+  <style>
+    :root {
+      --accent: #ff8243;
+      --accent-2: #f36b3d;
+      --accent-soft: #fff1e7;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #d97706;
+
+      --text-strong: #0a192f;
+      --text-body: #4b5563;
+      --text-muted: #6b7280;
+      --text-faint: #9ca3af;
+
+      --bg-surface: #ffffff;
+      --bg-muted: #f9fafb;
+      --bg-icon-tile: #fff7ed;
+      --bg-page: #f0ece6;
+      --bg-row-unread: #fffaf4;
+
+      --border-app: #f1ece8;
+      --border-card: #ececec;
+      --border-strong: #e3dfd8;
+      --border-row: #f3f0ec;
+
+      --radius-card: 12px;
+      --radius-modal: 14px;
+      --radius-pill: 999px;
+      --radius-input: 10px;
+      --radius-btn: 8px;
+
+      --shadow-card: 0 4px 16px rgba(10,25,47,0.04);
+      --shadow-modal: 0 12px 48px rgba(10,25,47,0.16);
+      --shadow-popover: 0 16px 40px rgba(10,25,47,0.12), 0 2px 6px rgba(10,25,47,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-strong);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 56px 32px 96px;
+    }
+
+    .page-header { text-align: center; margin-bottom: 48px; }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 760px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    .section { margin-bottom: 64px; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--bg-icon-tile);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+    .section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .section .sub {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 24px;
+      max-width: 760px;
+    }
+
+    /* Frame container that simulates the live app surface */
+    .app-frame {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-modal);
+      box-shadow: var(--shadow-card);
+      overflow: visible;
+      position: relative;
+    }
+
+    /* Header bar mock */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-app);
+      background: var(--bg-surface);
+      border-radius: var(--radius-modal) var(--radius-modal) 0 0;
+    }
+    .app-header .brand {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-strong);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      color: var(--text-body);
+      position: relative;
+      transition: all 0.15s;
+    }
+    .icon-btn:hover {
+      background: var(--bg-muted);
+      border-color: var(--border-card);
+    }
+    .icon-btn.active {
+      background: var(--accent-soft);
+      border-color: #ffd9bf;
+      color: var(--accent-2);
+    }
+    .icon-btn svg { width: 18px; height: 18px; }
+
+    .unread-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg-surface);
+      line-height: 1;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff8243, #f36b3d);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* Dropdown popover */
+    .popover {
+      position: absolute;
+      top: 56px;
+      right: 60px;
+      width: 380px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-modal);
+      box-shadow: var(--shadow-popover);
+      overflow: hidden;
+      z-index: 10;
+    }
+    .popover::before {
+      content: '';
+      position: absolute;
+      top: -7px;
+      right: 20px;
+      width: 12px;
+      height: 12px;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-card);
+      border-left: 1px solid var(--border-card);
+      transform: rotate(45deg);
+    }
+    .popover-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-app);
+    }
+    .popover-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-strong);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .unread-count-chip {
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--accent-soft);
+      color: var(--accent-2);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .link-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-2);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+    }
+    .link-btn:hover { background: var(--accent-soft); }
+    .link-btn:disabled { color: var(--text-faint); cursor: default; }
+
+    .popover-body {
+      max-height: 440px;
+      overflow-y: auto;
+    }
+
+    .notif-row {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-row);
+      cursor: pointer;
+      transition: background 0.12s;
+      align-items: flex-start;
+      position: relative;
+    }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-row:hover { background: var(--bg-muted); }
+    .notif-row.unread { background: var(--bg-row-unread); }
+    .notif-row.unread::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 22px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .notif-icon-tile {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--bg-icon-tile);
+      color: var(--accent-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .notif-icon-tile svg { width: 16px; height: 16px; }
+
+    .notif-body { flex: 1; min-width: 0; }
+    .notif-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-strong);
+      line-height: 1.35;
+      margin-bottom: 2px;
+    }
+    .notif-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .notif-meta .dot { color: var(--text-faint); }
+    .notif-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .action-btn {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-card);
+      background: var(--bg-surface);
+      color: var(--text-body);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.12s;
+    }
+    .action-btn:hover {
+      background: var(--bg-muted);
+      border-color: var(--border-strong);
+    }
+    .action-btn.primary {
+      background: var(--accent-soft);
+      border-color: #ffd9bf;
+      color: var(--accent-2);
+    }
+    .action-btn.primary:hover {
+      background: #ffe5cf;
+      border-color: var(--accent);
+    }
+    .action-btn svg { width: 11px; height: 11px; }
+
+    /* Snooze sub-menu */
+    .snooze-menu {
+      position: absolute;
+      right: 16px;
+      bottom: -4px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      box-shadow: var(--shadow-popover);
+      padding: 6px;
+      width: 180px;
+      z-index: 5;
+    }
+    .snooze-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--text-body);
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .snooze-item:hover { background: var(--bg-muted); }
+    .snooze-item .kbd {
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .popover-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border-app);
+      text-align: center;
+      background: var(--bg-muted);
+    }
+    .popover-footer .link-btn { font-size: 12px; }
+
+    /* Empty state */
+    .empty {
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .empty-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--bg-icon-tile);
+      color: var(--accent-2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .empty-icon svg { width: 24px; height: 24px; }
+    .empty-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+    }
+    .empty-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Loading state */
+    .skeleton-row {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-row);
+      align-items: flex-start;
+    }
+    .skeleton-tile {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #f3f0ec 0%, #ebe7e2 50%, #f3f0ec 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      flex-shrink: 0;
+    }
+    .skeleton-body { flex: 1; }
+    .skeleton-line {
+      height: 10px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #f3f0ec 0%, #ebe7e2 50%, #f3f0ec 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      margin-bottom: 8px;
+    }
+    .skeleton-line.short { width: 60%; }
+    .skeleton-line.medium { width: 80%; }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Compare grid */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .state-card {
+      background: var(--bg-page);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-modal);
+      padding: 24px;
+    }
+    .state-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Toast parity sidebar */
+    .parity-row {
+      display: grid;
+      grid-template-columns: 1fr 24px 1fr;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .parity-arrow {
+      color: var(--accent-2);
+      text-align: center;
+      font-size: 18px;
+    }
+    .toast-mock {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .toast-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+    .toast-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+    .toast-actions { display: flex; gap: 6px; }
+
+    /* Annotations */
+    .annot {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .annot-item {
+      display: flex;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.5;
+    }
+    .annot-num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* I18n strip */
+    .i18n-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .i18n-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .i18n-lang {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      margin-bottom: 8px;
+    }
+    .i18n-copy {
+      font-size: 13px;
+      color: var(--text-strong);
+      font-weight: 500;
+    }
+
+    /* Mini demo stage for popover positioning */
+    .demo-stage {
+      position: relative;
+      height: 600px;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="page-header">
+      <h1>Header Bell — Notification Dropdown</h1>
+      <p>Frontend MVP for the header notification surface. <b>V1 is Reminders only</b> — the dropdown consumes <code>/coreleads/notifications</code> filtered to <code>REMINDER_FIRED</code> events and renders them with the same action parity as the live toast. Other notification types stay invisible until they have product-defined UX of their own.</p>
+    </div>
+
+    <!-- =========================================
+         DEFAULT STATE — dropdown open with reminders
+         ========================================= -->
+    <div class="section">
+      <span class="section-eyebrow">State 1 — Default (open)</span>
+      <h2>Bell open · unread reminders + recent activity</h2>
+      <p class="sub">Click the bell → standard design-system popover anchored under the icon. Unread reminders sit at the top with a left dot indicator and a soft accent background. Toast-parity actions (Mark Done · Snooze) live on each reminder row.</p>
+
+      <div class="app-frame demo-stage">
+        <!-- header -->
+        <div class="app-header">
+          <div class="brand">CorePilot</div>
+          <div class="header-actions">
+            <button class="icon-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+            <button class="icon-btn active" aria-label="Notifications">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              <span class="unread-dot">3</span>
+            </button>
+            <div class="avatar">R</div>
+          </div>
+        </div>
+
+        <!-- popover -->
+        <div class="popover">
+          <div class="popover-header">
+            <div class="popover-title">
+              Notifications
+              <span class="unread-count-chip">3 unread</span>
+            </div>
+            <button class="link-btn">Mark all as read</button>
+          </div>
+
+          <div class="popover-body">
+
+            <!-- Reminder row — unread -->
+            <div class="notif-row unread">
+              <div class="notif-icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><circle cx="18" cy="6" r="3" fill="#f36b3d" stroke="#f36b3d"/></svg>
+              </div>
+              <div class="notif-body">
+                <div class="notif-title">Hold chase: Auxílio financeiro pendente</div>
+                <div class="notif-meta">
+                  <span>Rawan</span><span class="dot">·</span><span>2 min ago</span>
+                </div>
+                <div class="notif-actions">
+                  <button class="action-btn primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Mark Done
+                  </button>
+                  <button class="action-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Snooze
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reminder row — unread, with snooze sub-menu OPEN to show the picker -->
+            <div class="notif-row unread" style="position:relative;">
+              <div class="notif-icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><circle cx="18" cy="6" r="3" fill="#f36b3d" stroke="#f36b3d"/></svg>
+              </div>
+              <div class="notif-body">
+                <div class="notif-title">Hold chase: Customer on extended vacation</div>
+                <div class="notif-meta">
+                  <span>Maram D.</span><span class="dot">·</span><span>14 min ago</span>
+                </div>
+                <div class="notif-actions">
+                  <button class="action-btn primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Mark Done
+                  </button>
+                  <button class="action-btn" style="background:var(--bg-muted);border-color:var(--border-strong);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Snooze
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:10px;"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                </div>
+              </div>
+              <!-- snooze submenu -->
+              <div class="snooze-menu">
+                <div class="snooze-item">15 minutes <span class="kbd">⌘1</span></div>
+                <div class="snooze-item">1 hour <span class="kbd">⌘2</span></div>
+                <div class="snooze-item">Tomorrow 9:00 AM <span class="kbd">⌘3</span></div>
+                <div class="snooze-item">Custom…</div>
+              </div>
+            </div>
+
+            <!-- Reminder row — unread -->
+            <div class="notif-row unread">
+              <div class="notif-icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><circle cx="18" cy="6" r="3" fill="#f36b3d" stroke="#f36b3d"/></svg>
+              </div>
+              <div class="notif-body">
+                <div class="notif-title">Reminder: contrnt</div>
+                <div class="notif-meta">
+                  <span>Aseel A.</span><span class="dot">·</span><span>1h ago</span>
+                </div>
+                <div class="notif-actions">
+                  <button class="action-btn primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Mark Done
+                  </button>
+                  <button class="action-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Snooze
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Read row — past reminder, no actions -->
+            <div class="notif-row">
+              <div class="notif-icon-tile" style="background:#ecfdf5;color:#16a34a;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="notif-body">
+                <div class="notif-title" style="font-weight:500;color:var(--text-body);">Reminder marked done — Hold chase: Aguardando Financeiro</div>
+                <div class="notif-meta">
+                  <span>Yesterday, 11:08 AM</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="popover-footer">
+            <button class="link-btn">View all notifications</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="annot">
+        <div class="annot-item"><span class="annot-num">1</span><div><b>Unread badge.</b> Numeric pill on the bell, sourced from <code>notificationControllerUnreadCount()</code>. Mirrors the existing badge pattern used elsewhere in the app.</div></div>
+        <div class="annot-item"><span class="annot-num">2</span><div><b>Unread row treatment.</b> Soft accent background + left dot. Distinct enough to scan, subtle enough to coexist with read rows.</div></div>
+        <div class="annot-item"><span class="annot-num">3</span><div><b>Toast parity actions.</b> Each <code>REMINDER_FIRED</code> row carries the same <b>Mark Done</b> / <b>Snooze</b> buttons the toast shows, calling the same handlers.</div></div>
+        <div class="annot-item"><span class="annot-num">4</span><div><b>Snooze sub-menu.</b> Same duration presets as the toast (15 min / 1 hour / Tomorrow 9 AM / Custom). Opens inline; standard design-system menu.</div></div>
+        <div class="annot-item"><span class="annot-num">5</span><div><b>Row click → conversation.</b> Clicking outside the action buttons navigates to the conversation that owns the reminder.</div></div>
+        <div class="annot-item"><span class="annot-num">6</span><div><b>Reminders only in V1.</b> Frontend filters the feed to <code>REMINDER_FIRED</code> events. Other backend notification types stay invisible until they have product-defined UX of their own.</div></div>
+      </div>
+    </div>
+
+    <!-- =========================================
+         EMPTY + LOADING + DRAWER VARIANTS
+         ========================================= -->
+    <div class="section">
+      <span class="section-eyebrow">State 2 — Edge states</span>
+      <h2>Empty · Loading</h2>
+      <p class="sub">Both states use the same popover shell as the default render so positioning, shadow, and header chrome stay consistent.</p>
+
+      <div class="compare">
+
+        <!-- EMPTY -->
+        <div class="state-card">
+          <div class="state-label">Empty (no notifications)</div>
+          <div style="position:relative;display:flex;justify-content:center;">
+            <div style="width:340px;background:var(--bg-surface);border:1px solid var(--border-card);border-radius:var(--radius-modal);box-shadow:var(--shadow-popover);overflow:hidden;">
+              <div class="popover-header">
+                <div class="popover-title">Notifications</div>
+                <button class="link-btn" disabled>Mark all as read</button>
+              </div>
+              <div class="empty">
+                <div class="empty-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="empty-title">You're all caught up</div>
+                <div class="empty-sub">No new notifications. Reminders and updates will appear here.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOADING -->
+        <div class="state-card">
+          <div class="state-label">Loading (initial fetch)</div>
+          <div style="position:relative;display:flex;justify-content:center;">
+            <div style="width:340px;background:var(--bg-surface);border:1px solid var(--border-card);border-radius:var(--radius-modal);box-shadow:var(--shadow-popover);overflow:hidden;">
+              <div class="popover-header">
+                <div class="popover-title">Notifications</div>
+                <button class="link-btn" disabled>Mark all as read</button>
+              </div>
+              <div>
+                <div class="skeleton-row">
+                  <div class="skeleton-tile"></div>
+                  <div class="skeleton-body">
+                    <div class="skeleton-line medium"></div>
+                    <div class="skeleton-line short"></div>
+                  </div>
+                </div>
+                <div class="skeleton-row">
+                  <div class="skeleton-tile"></div>
+                  <div class="skeleton-body">
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                  </div>
+                </div>
+                <div class="skeleton-row">
+                  <div class="skeleton-tile"></div>
+                  <div class="skeleton-body">
+                    <div class="skeleton-line medium"></div>
+                    <div class="skeleton-line short"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =========================================
+         TOAST PARITY
+         ========================================= -->
+    <div class="section">
+      <span class="section-eyebrow">Parity check — Toast ↔ Dropdown</span>
+      <h2>Same actions, same outcomes</h2>
+      <p class="sub">The dropdown is the persistent surface for what the toast shows in-the-moment. Action handlers, copy, and outcomes are identical — only the container differs.</p>
+
+      <div class="parity-row">
+        <div class="toast-mock">
+          <div style="width:30px;height:30px;border-radius:8px;background:var(--bg-icon-tile);color:var(--accent-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          </div>
+          <div>
+            <div class="toast-title">Reminder: Hold chase: Auxílio financeiro pendente</div>
+            <div class="toast-meta">Rawan · Conversation #0798</div>
+            <div class="toast-actions">
+              <button class="action-btn primary">Mark Done</button>
+              <button class="action-btn">Snooze</button>
+            </div>
+          </div>
+        </div>
+        <div class="parity-arrow">⇄</div>
+        <div style="background:var(--bg-surface);border:1px solid var(--border-card);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow-card);">
+          <div class="notif-row unread" style="padding:0;border:none;background:transparent;">
+            <div class="notif-icon-tile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            </div>
+            <div class="notif-body">
+              <div class="notif-title">Hold chase: Auxílio financeiro pendente</div>
+              <div class="notif-meta"><span>Rawan</span><span class="dot">·</span><span>2 min ago</span></div>
+              <div class="notif-actions">
+                <button class="action-btn primary">Mark Done</button>
+                <button class="action-btn">Snooze</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================
+         I18N STRIP
+         ========================================= -->
+    <div class="section">
+      <span class="section-eyebrow">Localization</span>
+      <h2>Empty state — EN / PT-BR / ES</h2>
+      <p class="sub">All strings ship in the three supported languages per house standard.</p>
+      <div class="i18n-strip">
+        <div class="i18n-card">
+          <div class="i18n-lang">English</div>
+          <div class="i18n-copy">You're all caught up — no notifications.</div>
+        </div>
+        <div class="i18n-card">
+          <div class="i18n-lang">Português (BR)</div>
+          <div class="i18n-copy">Tudo em dia — sem notificações.</div>
+        </div>
+        <div class="i18n-card">
+          <div class="i18n-lang">Español</div>
+          <div class="i18n-copy">Todo al día — sin notificaciones.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================
+         SCOPE & NON-GOALS
+         ========================================= -->
+    <div class="section">
+      <span class="section-eyebrow">Scope discipline</span>
+      <h2>In / out of scope</h2>
+      <div class="compare">
+        <div style="background:var(--bg-surface);border:1px solid var(--border-card);border-radius:var(--radius-modal);padding:24px;box-shadow:var(--shadow-card);">
+          <div style="font-size:12px;font-weight:700;color:var(--success);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">In scope (V1 — Reminders only)</div>
+          <ul style="list-style:none;padding:0;font-size:13px;color:var(--text-body);line-height:1.7;">
+            <li>✓ Bell click → dropdown</li>
+            <li>✓ Unread count badge (REMINDER_FIRED count)</li>
+            <li>✓ Reminder rows w/ Mark Done + Snooze (toast parity)</li>
+            <li>✓ Row click → conversation</li>
+            <li>✓ Mark all as read</li>
+            <li>✓ Empty + loading states</li>
+            <li>✓ Existing design-system popover</li>
+            <li>✓ EN / PT-BR / ES copy</li>
+          </ul>
+        </div>
+        <div style="background:var(--bg-surface);border:1px solid var(--border-card);border-radius:var(--radius-modal);padding:24px;box-shadow:var(--shadow-card);">
+          <div style="font-size:12px;font-weight:700;color:var(--danger);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Out of scope</div>
+          <ul style="list-style:none;padding:0;font-size:13px;color:var(--text-body);line-height:1.7;">
+            <li>✗ Non-reminder notification types (transfers, mentions, completions, etc.)</li>
+            <li>✗ Filtering / search inside the dropdown</li>
+            <li>✗ Notification preferences (per-type mute)</li>
+            <li>✗ Real-time push (WebSocket) — polling is enough</li>
+            <li>✗ Mobile / small-viewport layout</li>
+            <li>✗ Net-new component primitives</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
