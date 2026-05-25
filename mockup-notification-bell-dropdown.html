@@ -581,11 +581,7 @@
         <!-- popover -->
         <div class="popover">
           <div class="popover-header">
-            <div class="popover-title">
-              Notifications
-              <span class="unread-count-chip">3 unread</span>
-            </div>
-            <button class="link-btn">Mark all as read</button>
+            <div class="popover-title">Notifications</div>
           </div>
 
           <div class="popover-body">
@@ -667,34 +663,17 @@
               </div>
             </div>
 
-            <!-- Read row — past reminder, no actions -->
-            <div class="notif-row">
-              <div class="notif-icon-tile" style="background:#ecfdf5;color:#16a34a;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <div class="notif-body">
-                <div class="notif-title" style="font-weight:500;color:var(--text-body);">Reminder marked done — Hold chase: Aguardando Financeiro</div>
-                <div class="notif-meta">
-                  <span>Yesterday, 11:08 AM</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="popover-footer">
-            <button class="link-btn">View all notifications</button>
           </div>
         </div>
       </div>
 
       <div class="annot">
-        <div class="annot-item"><span class="annot-num">1</span><div><b>Unread badge.</b> Numeric pill on the bell, sourced from <code>notificationControllerUnreadCount()</code>. Mirrors the existing badge pattern used elsewhere in the app.</div></div>
-        <div class="annot-item"><span class="annot-num">2</span><div><b>Unread row treatment.</b> Soft accent background + left dot. Distinct enough to scan, subtle enough to coexist with read rows.</div></div>
-        <div class="annot-item"><span class="annot-num">3</span><div><b>Toast parity actions.</b> Each <code>REMINDER_FIRED</code> row carries the same <b>Mark Done</b> / <b>Snooze</b> buttons the toast shows, calling the same handlers.</div></div>
-        <div class="annot-item"><span class="annot-num">4</span><div><b>Snooze sub-menu.</b> Same duration presets as the toast (15 min / 1 hour / Tomorrow 9 AM / Custom). Opens inline; standard design-system menu.</div></div>
-        <div class="annot-item"><span class="annot-num">5</span><div><b>Row click → conversation.</b> Clicking outside the action buttons navigates to the conversation that owns the reminder.</div></div>
-        <div class="annot-item"><span class="annot-num">6</span><div><b>Reminders only in V1.</b> Frontend filters the feed to <code>REMINDER_FIRED</code> events. Other backend notification types stay invisible until they have product-defined UX of their own.</div></div>
+        <div class="annot-item"><span class="annot-num">1</span><div><b>Bell badge.</b> Count of currently-active reminders (fired and not yet acted on). Sourced from the backend feed filtered to <code>REMINDER_FIRED</code>. Mirrors the existing badge pattern used elsewhere in the app.</div></div>
+        <div class="annot-item"><span class="annot-num">2</span><div><b>Active row treatment.</b> Soft accent background + left dot. Every row in the dropdown is an actionable reminder.</div></div>
+        <div class="annot-item"><span class="annot-num">3</span><div><b>Toast parity actions.</b> Each row carries the same <b>Mark Done</b> / <b>Snooze</b> buttons the toast shows, calling the same handlers. <b>Marking Done removes the row from the dropdown</b> (no read-history concept) and decrements the bell badge.</div></div>
+        <div class="annot-item"><span class="annot-num">4</span><div><b>Snooze sub-menu.</b> Same duration presets as the toast (15 min / 1 hour / Tomorrow 9 AM / Custom). Opens inline; standard design-system menu. Snoozing also removes the row — it re-appears when the new fire time hits.</div></div>
+        <div class="annot-item"><span class="annot-num">5</span><div><b>The name on each row is the conversation contact</b> (the customer / lead the reminder is anchored to) — not the reminder creator. Clicking the row body navigates to that conversation.</div></div>
+        <div class="annot-item"><span class="annot-num">6</span><div><b>Reminders only in V1.</b> Frontend filters the feed to <code>REMINDER_FIRED</code> events. Other backend notification types stay invisible until they have product-defined UX of their own. <b>No</b> "View all notifications" footer — no destination page exists yet.</div></div>
       </div>
     </div>
 
@@ -715,14 +694,13 @@
             <div style="width:340px;background:var(--bg-surface);border:1px solid var(--border-card);border-radius:var(--radius-modal);box-shadow:var(--shadow-popover);overflow:hidden;">
               <div class="popover-header">
                 <div class="popover-title">Notifications</div>
-                <button class="link-btn" disabled>Mark all as read</button>
               </div>
               <div class="empty">
                 <div class="empty-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
                 <div class="empty-title">You're all caught up</div>
-                <div class="empty-sub">No new notifications. Reminders and updates will appear here.</div>
+                <div class="empty-sub">No active reminders. New ones will appear here when they fire.</div>
               </div>
             </div>
           </div>
@@ -735,7 +713,6 @@
             <div style="width:340px;background:var(--bg-surface);border:1px solid var(--border-card);border-radius:var(--radius-modal);box-shadow:var(--shadow-popover);overflow:hidden;">
               <div class="popover-header">
                 <div class="popover-title">Notifications</div>
-                <button class="link-btn" disabled>Mark all as read</button>
               </div>
               <div>
                 <div class="skeleton-row">
@@ -842,10 +819,10 @@
           <div style="font-size:12px;font-weight:700;color:var(--success);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">In scope (V1 — Reminders only)</div>
           <ul style="list-style:none;padding:0;font-size:13px;color:var(--text-body);line-height:1.7;">
             <li>✓ Bell click → dropdown</li>
-            <li>✓ Unread count badge (REMINDER_FIRED count)</li>
-            <li>✓ Reminder rows w/ Mark Done + Snooze (toast parity)</li>
+            <li>✓ Badge with active-reminder count</li>
+            <li>✓ Rows w/ Mark Done + Snooze (toast parity)</li>
+            <li>✓ Mark Done removes the row from the dropdown</li>
             <li>✓ Row click → conversation</li>
-            <li>✓ Mark all as read</li>
             <li>✓ Empty + loading states</li>
             <li>✓ Existing design-system popover</li>
             <li>✓ EN / PT-BR / ES copy</li>
@@ -855,6 +832,8 @@
           <div style="font-size:12px;font-weight:700;color:var(--danger);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Out of scope</div>
           <ul style="list-style:none;padding:0;font-size:13px;color:var(--text-body);line-height:1.7;">
             <li>✗ Non-reminder notification types (transfers, mentions, completions, etc.)</li>
+            <li>✗ "View all notifications" page / notification management module</li>
+            <li>✗ Read-history (Done = gone, not archived in-dropdown)</li>
             <li>✗ Filtering / search inside the dropdown</li>
             <li>✗ Notification preferences (per-type mute)</li>
             <li>✗ Real-time push (WebSocket) — polling is enough</li>
