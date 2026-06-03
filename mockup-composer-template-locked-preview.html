@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Composer · Template support (interim) — mockups</title>
+  <style>
+    :root {
+      --bg-page: #f5f3ef;
+      --bg-board: #f5f3ef;
+      --bg-frame: #ffffff;
+      --bg-hover: #f7f5f1;
+      --bg-soft: #f0ece4;
+      --bg-faint: #fafaf7;
+
+      --text: #1a1a1a;
+      --text-muted: #6b6b6b;
+      --text-faint: #9a9a9a;
+
+      --border: #e8e4dc;
+      --border-soft: #efeae0;
+
+      --accent: #ff8243;
+      --accent-soft: #fff1e8;
+      --accent-deep: #d35400;
+
+      --success: #1d9954;
+      --success-soft: #e6f6ec;
+      --success-bd: #b9e3c8;
+
+      --link-blue: #1d65c4;
+
+      --variable-bg: #fff1e8;
+      --variable-bd: #ffd5b8;
+      --variable-tx: #a14a18;
+
+      --shadow-card: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-rail: 0 4px 18px rgba(0,0,0,0.07);
+
+      --radius-card: 12px;
+      --radius-input: 10px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg-page);
+      background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0);
+      background-size: 22px 22px;
+      color: var(--text);
+      padding: 36px 24px 96px;
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+
+    /* ---- Page header ---- */
+    .page-head {
+      max-width: 1300px;
+      margin: 0 auto 30px;
+    }
+    .page-head .pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      border: 1px solid #ffd5b8;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 10px;
+    }
+    .page-head h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .page-head p {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 760px;
+      line-height: 1.55;
+    }
+
+    /* ---- State row layout ---- */
+    .row {
+      max-width: 1300px;
+      margin: 0 auto 36px;
+    }
+    .row.two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .state-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .state-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(255, 130, 67, 0.3);
+    }
+    .state-text h2 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .state-text p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ──────────────────────────────────────── */
+    /* STATE 1 — Create template form (button)  */
+    /* ──────────────────────────────────────── */
+    .create-form {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px 22px;
+      max-width: 760px;
+      box-shadow: var(--shadow-card);
+    }
+    .form-section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .form-section-header .icon {
+      width: 22px; height: 18px;
+      background: #fff;
+      border: 1.5px solid var(--text-muted);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .form-section-header .label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .form-section-header .req {
+      font-size: 12px;
+      color: var(--text-faint);
+      font-weight: 500;
+    }
+    .form-section-header .switch {
+      margin-left: auto;
+      width: 40px; height: 22px;
+      background: var(--accent);
+      border-radius: var(--radius-pill);
+      position: relative;
+      cursor: pointer;
+    }
+    .form-section-header .switch::after {
+      content: "";
+      position: absolute;
+      top: 2px; right: 2px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    .btn-row {
+      display: grid;
+      grid-template-columns: 160px 1fr 1.6fr 24px;
+      gap: 10px;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--border);
+      margin-bottom: 14px;
+    }
+    .btn-row.last { border-bottom: 0; margin-bottom: 8px; }
+    .btn-row.qr {
+      grid-template-columns: 160px 1fr 24px;
+    }
+
+    .input,
+    .select-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+    }
+    .select-box {
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .select-box.active {
+      border: 1.5px solid var(--accent);
+    }
+    .select-box .caret {
+      font-size: 11px;
+      color: var(--text-faint);
+      margin-left: 6px;
+    }
+    .input .placeholder { color: var(--text-faint); }
+    .row-remove {
+      width: 24px; height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--text-faint);
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .count-line {
+      font-size: 11px;
+      color: var(--text-faint);
+      margin-top: -8px;
+      padding-left: 170px;
+      margin-bottom: 14px;
+    }
+
+    .add-another {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-deep);
+      padding: 8px 0 2px;
+      cursor: pointer;
+    }
+    .add-another .plus {
+      width: 16px; height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .form-help {
+      font-size: 11.5px;
+      line-height: 1.55;
+      padding: 10px 12px;
+      background: var(--accent-soft);
+      border: 1px solid #ffd5b8;
+      color: var(--accent-deep);
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    /* ──────────────────────────────────────── */
+    /* STATES 2 & 3 — Composer locked preview   */
+    /* ──────────────────────────────────────── */
+    .composer {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-rail);
+    }
+    .conv-header {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatar-md {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: #b69bd9;
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .conv-header .ident { flex: 1; min-width: 0; }
+    .conv-header .name { font-size: 13.5px; font-weight: 700; }
+    .conv-header .meta { font-size: 11px; color: var(--text-faint); }
+    .conv-header .sender-tag {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-soft);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    .thread {
+      padding: 14px 16px 16px;
+      background: var(--bg-faint);
+      min-height: 76px;
+    }
+    .msg {
+      max-width: 70%;
+      padding: 7px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.45;
+      margin-bottom: 6px;
+      background: #fff;
+      border: 1px solid var(--border-soft);
+    }
+    .msg.in { margin-right: auto; }
+    .msg.out {
+      margin-left: auto;
+      background: var(--accent-soft);
+      border-color: #ffd5b8;
+    }
+    .msg .time {
+      display: inline-block;
+      font-size: 10px;
+      color: var(--text-faint);
+      margin-left: 6px;
+    }
+
+    .window-bar {
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: #fff;
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .window-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+      font-weight: 600;
+      background: var(--success-soft);
+      color: var(--success);
+      border: 1px solid var(--success-bd);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+    .window-pill .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    .composer-body {
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    /* Template card (compact) */
+    .tmpl-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+    }
+    .tmpl-head {
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .tmpl-icon {
+      width: 22px; height: 22px;
+      background: var(--accent-soft);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-deep);
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    .tmpl-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      flex: 1;
+    }
+    .tmpl-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+    }
+    .tmpl-pill.approved {
+      background: var(--success-soft);
+      color: var(--success);
+      border: 1px solid var(--success-bd);
+    }
+    .tmpl-pill.locked {
+      background: var(--bg-soft);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .tmpl-pill .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    /* Realistic WA-style preview */
+    .wa-frame {
+      padding: 14px 14px 12px;
+      background: #efe7dc;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 1px, transparent 1px),
+        radial-gradient(circle at 80% 60%, rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+    .wa-bubble {
+      background: #fff;
+      border-radius: 10px 10px 10px 2px;
+      max-width: 82%;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .wa-image {
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      background:
+        linear-gradient(135deg, #ffd0a8, #ff8243 65%, #c9520e);
+      position: relative;
+    }
+    .wa-image::after {
+      content: "🖼";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.55);
+      font-size: 28px;
+    }
+    .wa-body {
+      padding: 7px 10px 4px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .wa-body p { margin-bottom: 4px; }
+    .wa-body p:last-child { margin-bottom: 0; }
+    .wa-time {
+      font-size: 9.5px;
+      color: var(--text-faint);
+      text-align: right;
+      padding: 0 10px 7px;
+    }
+    .var {
+      background: var(--variable-bg);
+      color: var(--variable-tx);
+      border: 1px solid var(--variable-bd);
+      padding: 0 5px;
+      border-radius: 3px;
+      font-weight: 500;
+      font-size: 11.5px;
+    }
+
+    .wa-buttons {
+      margin-top: 4px;
+      max-width: 82%;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .wa-button {
+      background: #fff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--link-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+    }
+    .wa-button .icon { font-size: 11px; }
+    .wa-button .type-tag {
+      font-size: 9px;
+      font-weight: 600;
+      background: var(--bg-soft);
+      color: var(--text-muted);
+      padding: 1px 5px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+
+    /* Action bar */
+    .action-bar {
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-top: 1px solid var(--border-soft);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn.remove {
+      color: #c43030;
+      border-color: #f4c2c2;
+    }
+    .btn.send {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 2px 6px rgba(255, 130, 67, 0.28);
+      padding: 8px 16px;
+      font-size: 12.5px;
+    }
+
+    /* Legend */
+    .legend {
+      max-width: 1300px;
+      margin: 36px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .legend h3 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .legend ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 28px;
+    }
+    .legend li {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      position: relative;
+      padding-left: 14px;
+    }
+    .legend li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .legend li strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    @media (max-width: 1000px) {
+      .row.two { grid-template-columns: 1fr; }
+      .legend ul { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-head">
+    <span class="pill">Mockup · Composer · Interim</span>
+    <h1>Composer — template support (interim)</h1>
+    <p>
+      Three states across the two surfaces this epic touches: the template <strong>creation form</strong> in Conversations (with full button parity to Campaigns), and the composer's <strong>locked preview</strong> when an approved template is inserted (text + CTA, image + text + CTA). Composer chrome stays as it is today.
+    </p>
+  </div>
+
+  <!-- ═════════════ ROW 1 — Create form ═════════════ -->
+  <div class="row">
+    <div class="state-head">
+      <div class="state-num">1</div>
+      <div class="state-text">
+        <h2>Template creation — full button controls</h2>
+        <p>One BUTTON section with a section toggle. Each row picks a type (URL / Quick reply / Phone / Copy code) and gets the right value field (Quick reply needs no value — the text IS the reply). Max 3 buttons. Reuses the Campaigns component.</p>
+      </div>
+    </div>
+
+    <div class="create-form">
+      <div class="form-section-header">
+        <div class="icon">⌧</div>
+        <span class="label">Button</span>
+        <span class="req">Optional</span>
+        <div class="switch"></div>
+      </div>
+
+      <!-- Button 1: URL CTA -->
+      <div class="btn-row">
+        <div class="select-box active">
+          <span>URL</span>
+          <span class="caret">▾</span>
+        </div>
+        <div class="input"><span>Track order</span></div>
+        <div class="input"><span class="placeholder">https://shop.example.com/orders/{{1}}</span></div>
+        <div class="row-remove">×</div>
+      </div>
+      <div class="count-line">11 / 25</div>
+
+      <!-- Button 2: Quick reply (only 2 fields, no value) -->
+      <div class="btn-row qr">
+        <div class="select-box">
+          <span>Quick reply</span>
+          <span class="caret">▾</span>
+        </div>
+        <div class="input"><span>Contact support</span></div>
+        <div class="row-remove">×</div>
+      </div>
+      <div class="count-line">15 / 25</div>
+
+      <!-- Add another button affordance -->
+      <div class="add-another">
+        <span class="plus">+</span> Add another button
+      </div>
+
+      <div class="form-help">
+        Max 3 buttons. Reuses the same component Campaigns uses today — single source of truth, so the upcoming composer revamp inherits parity automatically.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════ ROW 2 — Locked previews ═════════════ -->
+  <div class="row two">
+
+    <!-- STATE 2: Text + CTA -->
+    <div>
+      <div class="state-head">
+        <div class="state-num">2</div>
+        <div class="state-text">
+          <h2>Text + CTA — locked preview</h2>
+          <p>Inserted template renders as the customer will see it. Body text with variables substituted, buttons rendered with their type. Replace · Remove · Send.</p>
+        </div>
+      </div>
+
+      <div class="composer">
+        <div class="conv-header">
+          <div class="avatar-md">PR</div>
+          <div class="ident">
+            <div class="name">Priya Rajan</div>
+            <div class="meta">Assigned to you · Sales-A</div>
+          </div>
+          <span class="sender-tag">Aws from Coretava</span>
+        </div>
+
+        <div class="thread">
+          <div class="msg in">Hey, has my order shipped yet?<span class="time">9:42</span></div>
+          <div class="msg out">Let me check for you — one moment.<span class="time">9:43</span></div>
+        </div>
+
+        <div class="window-bar">
+          <div>Replying to Priya</div>
+          <span class="window-pill"><span class="dot"></span>Window open · 47m</span>
+        </div>
+
+        <div class="composer-body">
+          <div class="tmpl-card">
+            <div class="tmpl-head">
+              <div class="tmpl-icon">📄</div>
+              <div class="tmpl-name">Shipping confirmation</div>
+              <span class="tmpl-pill approved"><span class="dot"></span>Approved</span>
+              <span class="tmpl-pill locked">Locked</span>
+            </div>
+
+            <div class="wa-frame">
+              <div class="wa-bubble">
+                <div class="wa-body">
+                  <p>Hi <span class="var">Priya</span>! Great news — your order <span class="var">#80421</span> has shipped to <span class="var">San Francisco</span>.</p>
+                  <p>Track it anytime with the button below.</p>
+                </div>
+                <div class="wa-time">9:44 AM ✓✓</div>
+              </div>
+
+              <div class="wa-buttons">
+                <div class="wa-button">
+                  <span class="icon">↗</span> Track order
+                  <span class="type-tag">URL</span>
+                </div>
+                <div class="wa-button">
+                  <span class="icon">↩</span> Contact support
+                  <span class="type-tag">Quick reply</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="action-bar">
+              <button class="btn">↔ Replace</button>
+              <button class="btn remove">× Remove</button>
+              <button class="btn send">Send ↗</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATE 3: Image + Text + CTA -->
+    <div>
+      <div class="state-head">
+        <div class="state-num">3</div>
+        <div class="state-text">
+          <h2>Image header + text + CTA</h2>
+          <p>Image header rendered (no filename clutter), body, one CTA button. WhatsApp-realistic styling, compact.</p>
+        </div>
+      </div>
+
+      <div class="composer">
+        <div class="conv-header">
+          <div class="avatar-md">PR</div>
+          <div class="ident">
+            <div class="name">Priya Rajan</div>
+            <div class="meta">Assigned to you · Sales-A</div>
+          </div>
+          <span class="sender-tag">Aws from Coretava</span>
+        </div>
+
+        <div class="thread">
+          <div class="msg in">Is the Aurora bag back in stock?<span class="time">9:40</span></div>
+          <div class="msg out">Yes! I'll send you the details now.<span class="time">9:42</span></div>
+        </div>
+
+        <div class="window-bar">
+          <div>Replying to Priya</div>
+          <span class="window-pill"><span class="dot"></span>Window open · 47m</span>
+        </div>
+
+        <div class="composer-body">
+          <div class="tmpl-card">
+            <div class="tmpl-head">
+              <div class="tmpl-icon">🖼️</div>
+              <div class="tmpl-name">Back in stock alert</div>
+              <span class="tmpl-pill approved"><span class="dot"></span>Approved</span>
+              <span class="tmpl-pill locked">Locked</span>
+            </div>
+
+            <div class="wa-frame">
+              <div class="wa-bubble">
+                <div class="wa-image"></div>
+                <div class="wa-body">
+                  <p>Hi <span class="var">Priya</span>! The item you wanted is back in stock at <span class="var">SF · Union Square</span>. Reserve yours before it sells out.</p>
+                </div>
+                <div class="wa-time">9:44 AM ✓✓</div>
+              </div>
+
+              <div class="wa-buttons">
+                <div class="wa-button">
+                  <span class="icon">↗</span> Shop now
+                  <span class="type-tag">URL</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="action-bar">
+              <button class="btn">↔ Replace</button>
+              <button class="btn remove">× Remove</button>
+              <button class="btn send">Send ↗</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <h3>What's locked, what's not</h3>
+    <ul>
+      <li><strong>Template name + Approved + Locked pill</strong> at the top of the inserted card make it obvious the content is governed by the Library.</li>
+      <li><strong>Body, image, and buttons</strong> render exactly as the customer will receive them, on the WhatsApp chat background. Variables show the contact's resolved values.</li>
+      <li><strong>Button types</strong> appear as small tags (URL · Quick reply · Phone · Copy code) so the agent can tell what each one does.</li>
+      <li><strong>Replace</strong> opens the template picker (same as the original insert flow).</li>
+      <li><strong>Remove</strong> clears the inserted template, returns to an empty composer.</li>
+      <li><strong>Send</strong> sends the rendered template. Disabled if any variable can't resolve for the current contact; error message identifies which.</li>
+    </ul>
+  </div>
+
+</body>
+</html>
