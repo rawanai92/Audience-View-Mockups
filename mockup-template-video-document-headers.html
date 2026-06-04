@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Templates · Video + Document headers — mockups</title>
+  <style>
+    :root {
+      --bg-page: #f5f3ef;
+      --bg-board: #f5f3ef;
+      --bg-frame: #ffffff;
+      --bg-hover: #f7f5f1;
+      --bg-soft: #f0ece4;
+      --bg-faint: #fafaf7;
+
+      --text: #1a1a1a;
+      --text-muted: #6b6b6b;
+      --text-faint: #9a9a9a;
+
+      --border: #e8e4dc;
+      --border-soft: #efeae0;
+
+      --accent: #ff8243;
+      --accent-soft: #fff1e8;
+      --accent-deep: #d35400;
+
+      --success: #1d9954;
+      --success-soft: #e6f6ec;
+      --success-bd: #b9e3c8;
+
+      --link-blue: #1d65c4;
+
+      --doc-blue: #2566c4;
+      --doc-blue-soft: #e8eff9;
+      --doc-blue-bd: #c3d5ef;
+
+      --video-purple: #5e4bb0;
+      --video-purple-soft: #eee9fa;
+      --video-purple-bd: #c9bef0;
+
+      --variable-bg: #fff1e8;
+      --variable-bd: #ffd5b8;
+      --variable-tx: #a14a18;
+
+      --shadow-card: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-rail: 0 4px 18px rgba(0,0,0,0.07);
+
+      --radius-card: 12px;
+      --radius-input: 10px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg-page);
+      background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0);
+      background-size: 22px 22px;
+      color: var(--text);
+      padding: 36px 24px 96px;
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+
+    /* ---- Page header ---- */
+    .page-head {
+      max-width: 1300px;
+      margin: 0 auto 30px;
+    }
+    .page-head .pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      border: 1px solid #ffd5b8;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 10px;
+    }
+    .page-head h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .page-head p {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 820px;
+      line-height: 1.55;
+    }
+    .page-head a { color: var(--accent-deep); font-weight: 600; text-decoration: none; }
+
+    /* ---- State row layout ---- */
+    .row {
+      max-width: 1300px;
+      margin: 0 auto 36px;
+    }
+    .row.two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .state-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .state-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(255, 130, 67, 0.3);
+    }
+    .state-text h2 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .state-text p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ──────────────────────────────────────── */
+    /* STATE 1 — Campaigns builder header pick   */
+    /* ──────────────────────────────────────── */
+    .create-form {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px 22px;
+      max-width: 760px;
+      box-shadow: var(--shadow-card);
+    }
+    .form-section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .form-section-header .icon {
+      width: 22px; height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+    .form-section-header .label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .form-section-header .req {
+      font-size: 12px;
+      color: var(--text-faint);
+      font-weight: 500;
+    }
+    .form-section-header .switch {
+      margin-left: auto;
+      width: 40px; height: 22px;
+      background: var(--accent);
+      border-radius: var(--radius-pill);
+      position: relative;
+      cursor: pointer;
+    }
+    .form-section-header .switch::after {
+      content: "";
+      position: absolute;
+      top: 2px; right: 2px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    /* Header type picker (single-line pills) */
+    .type-picker {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .type-tile {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      background: #fff;
+      transition: border-color .15s, background .15s;
+    }
+    .type-tile .glyph {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+    .type-tile .glyph svg { display: block; }
+    .type-tile .name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .type-tile.active {
+      border: 1.5px solid var(--accent);
+      background: var(--accent-soft);
+    }
+    .type-tile.active .glyph { color: var(--accent-deep); }
+    .type-tile.active .name { color: var(--accent-deep); }
+
+    /* Upload dropzone */
+    .dropzone {
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 22px 18px;
+      text-align: center;
+      background: var(--bg-faint);
+    }
+    .dropzone.video { border-color: var(--video-purple-bd); background: #faf8ff; }
+    .dropzone.doc { border-color: var(--doc-blue-bd); background: #f6f9fe; }
+    .dropzone .icon-lg {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .dropzone .icon-lg.video { background: var(--video-purple-soft); color: var(--video-purple); }
+    .dropzone .icon-lg.doc { background: var(--doc-blue-soft); color: var(--doc-blue); }
+    .dropzone .cta {
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .dropzone .cta .browse {
+      color: var(--accent-deep);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .dropzone .specs {
+      font-size: 11px;
+      color: var(--text-faint);
+      line-height: 1.5;
+    }
+
+    /* Uploaded file row */
+    .file-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #fff;
+      margin-top: 12px;
+    }
+    .file-row .ficon {
+      width: 34px; height: 34px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .file-row .ficon.video { background: var(--video-purple-soft); color: var(--video-purple); }
+    .file-row .ficon.doc { background: var(--doc-blue-soft); color: var(--doc-blue); }
+    .file-row .fmeta { flex: 1; min-width: 0; }
+    .file-row .fname {
+      font-size: 12.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-row .fsize { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+    .file-row .fremove {
+      width: 26px; height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-faint);
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .file-row .fremove:hover { background: var(--bg-hover); color: #c43030; }
+
+    /* Validation error state (matches image upload UX today) */
+    .dropzone.error {
+      border-color: #d93232;
+      background: #fdecec;
+    }
+    .dropzone.error .icon-lg.video,
+    .dropzone.error .icon-lg.doc {
+      background: #fdecec;
+      color: #c43030;
+    }
+    .error-help {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: #c43030;
+      margin-top: 8px;
+      padding-left: 2px;
+    }
+    .error-help svg { flex-shrink: 0; }
+
+    /* ──────────────────────────────────────── */
+    /* STATES 2 & 3 — Composer locked preview   */
+    /* ──────────────────────────────────────── */
+    .composer {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-rail);
+    }
+    .conv-header {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatar-md {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: #b69bd9;
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .conv-header .ident { flex: 1; min-width: 0; }
+    .conv-header .name { font-size: 13.5px; font-weight: 700; }
+    .conv-header .meta { font-size: 11px; color: var(--text-faint); }
+    .conv-header .sender-tag {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-soft);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    .thread {
+      padding: 14px 16px 16px;
+      background: var(--bg-faint);
+      min-height: 76px;
+    }
+    .msg {
+      max-width: 70%;
+      padding: 7px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.45;
+      margin-bottom: 6px;
+      background: #fff;
+      border: 1px solid var(--border-soft);
+    }
+    .msg.in { margin-right: auto; }
+    .msg.out {
+      margin-left: auto;
+      background: var(--accent-soft);
+      border-color: #ffd5b8;
+    }
+    .msg .time {
+      display: inline-block;
+      font-size: 10px;
+      color: var(--text-faint);
+      margin-left: 6px;
+    }
+
+    .window-bar {
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: #fff;
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .window-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+      font-weight: 600;
+      background: var(--success-soft);
+      color: var(--success);
+      border: 1px solid var(--success-bd);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+    .window-pill .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    .composer-body {
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    /* Template card (compact) */
+    .tmpl-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+    }
+    .tmpl-head {
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .tmpl-icon {
+      width: 22px; height: 22px;
+      background: var(--accent-soft);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-deep);
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    .tmpl-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      flex: 1;
+    }
+    .tmpl-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+    }
+    .tmpl-pill.approved {
+      background: var(--success-soft);
+      color: var(--success);
+      border: 1px solid var(--success-bd);
+    }
+    .tmpl-pill.locked {
+      background: var(--bg-soft);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .tmpl-pill .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    /* WhatsApp-style preview */
+    .wa-frame {
+      padding: 14px 14px 12px;
+      background: #efe7dc;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 1px, transparent 1px),
+        radial-gradient(circle at 80% 60%, rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+    .wa-bubble {
+      background: #fff;
+      border-radius: 10px 10px 10px 2px;
+      max-width: 82%;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    /* Video header in WA bubble */
+    .wa-video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background:
+        linear-gradient(135deg, #2a2540 0%, #4a3f7a 55%, #7c5fb8 100%);
+      position: relative;
+    }
+    .wa-video .duration {
+      position: absolute;
+      bottom: 7px;
+      right: 8px;
+      font-size: 10px;
+      color: #fff;
+      background: rgba(0,0,0,0.55);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .wa-video .play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wa-video .play .circle {
+      width: 46px; height: 46px;
+      background: rgba(0,0,0,0.55);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    }
+    .wa-video .play .circle svg { margin-left: 2px; }
+
+    /* Document header in WA bubble */
+    .wa-doc {
+      padding: 10px 12px 10px;
+      background: #f6f5f1;
+      border-bottom: 1px solid #e8e4dc;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .wa-doc .doc-icon {
+      width: 38px; height: 46px;
+      background: #fff;
+      border-radius: 5px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 6px;
+      flex-shrink: 0;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      font-size: 8.5px;
+      font-weight: 700;
+      color: var(--doc-blue);
+      letter-spacing: 0.04em;
+    }
+    .wa-doc .doc-icon::before {
+      content: "";
+      position: absolute;
+      top: 0; right: 0;
+      width: 11px; height: 11px;
+      background:
+        linear-gradient(225deg, transparent 50%, #f2efe7 50%);
+      border-bottom-left-radius: 3px;
+    }
+    .wa-doc .doc-icon::after {
+      content: "";
+      position: absolute;
+      top: 11px; left: 6px; right: 6px;
+      height: 1.5px;
+      background: var(--doc-blue-soft);
+      box-shadow:
+        0 4px 0 0 var(--doc-blue-soft),
+        0 8px 0 0 var(--doc-blue-soft);
+    }
+    .wa-doc .doc-meta { flex: 1; min-width: 0; }
+    .wa-doc .doc-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+    .wa-doc .doc-size { font-size: 10.5px; color: var(--text-faint); margin-top: 1px; }
+    .wa-doc .dl-icon {
+      width: 22px; height: 22px;
+      background: #e3ddd0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    .wa-body {
+      padding: 7px 10px 4px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .wa-body p { margin-bottom: 4px; }
+    .wa-body p:last-child { margin-bottom: 0; }
+    .wa-time {
+      font-size: 9.5px;
+      color: var(--text-faint);
+      text-align: right;
+      padding: 0 10px 7px;
+    }
+    .var {
+      background: var(--variable-bg);
+      color: var(--variable-tx);
+      border: 1px solid var(--variable-bd);
+      padding: 0 5px;
+      border-radius: 3px;
+      font-weight: 500;
+      font-size: 11.5px;
+    }
+
+    .wa-buttons {
+      margin-top: 4px;
+      max-width: 82%;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .wa-button {
+      background: #fff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--link-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+    }
+    .wa-button .icon { font-size: 11px; }
+    .wa-button .type-tag {
+      font-size: 9px;
+      font-weight: 600;
+      background: var(--bg-soft);
+      color: var(--text-muted);
+      padding: 1px 5px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+
+    /* Action bar */
+    .action-bar {
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-top: 1px solid var(--border-soft);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn.remove {
+      color: #c43030;
+      border-color: #f4c2c2;
+    }
+    .btn.send {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 2px 6px rgba(255, 130, 67, 0.28);
+      padding: 8px 16px;
+      font-size: 12.5px;
+    }
+
+    /* ──────────────────────────────────────── */
+    /* STATE 4 — Campaigns preview pane         */
+    /* ──────────────────────────────────────── */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .preview-pane {
+      background: #FFF8F5;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 18px;
+      box-shadow: var(--shadow-card);
+    }
+    .preview-pane .pane-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .preview-pane .pane-label .badge {
+      font-size: 9.5px;
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #ffd5b8;
+      letter-spacing: 0.04em;
+    }
+    /* iPhone frame */
+    .iphone {
+      width: 280px;
+      margin: 0 auto;
+      background: #ede4d8;
+      background-image:
+        radial-gradient(circle at 22% 18%, rgba(255,255,255,0.5) 1px, transparent 1px),
+        radial-gradient(circle at 70% 62%, rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      border-radius: 28px;
+      padding: 18px 12px 22px;
+      border: 6px solid #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .iphone .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      padding: 0 4px;
+    }
+    .iphone .top-bar .biz {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .iphone .top-bar .biz .av {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .iphone .wa-bubble {
+      max-width: 100%;
+    }
+    .iphone .wa-time { padding: 0 10px 6px; }
+
+    /* Legend */
+    .legend {
+      max-width: 1300px;
+      margin: 36px auto 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .legend h3 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .legend ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 28px;
+    }
+    .legend li {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      position: relative;
+      padding-left: 14px;
+    }
+    .legend li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .legend li strong { color: var(--text); font-weight: 700; }
+
+    @media (max-width: 1000px) {
+      .row.two { grid-template-columns: 1fr; }
+      .preview-grid { grid-template-columns: 1fr; }
+      .legend ul { grid-template-columns: 1fr; }
+      .type-picker { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-head">
+    <span class="pill">Mockup · Templates · Video + Document headers</span>
+    <h1>WhatsApp templates — video &amp; document headers</h1>
+    <p>
+      Follow-up to <a href="https://app.clickup.com/t/86exujrb0">86exujrb0</a>, which carved out video and document headers as out of scope. Adds two new header types (video, document) to the WhatsApp template builder and renders them in both the Campaigns preview and the Conversations composer's locked preview. Upload-only — matching how image headers work today. Per Meta: video is MP4 up to 16&nbsp;MB; documents cover PDF, Word, Excel, and PowerPoint up to 100&nbsp;MB. Same error UX as image when the wrong file is dropped.
+    </p>
+  </div>
+
+  <!-- ═════════════ ROW 1 — Builder header type picker ═════════════ -->
+  <div class="row">
+    <div class="state-head">
+      <div class="state-num">1</div>
+      <div class="state-text">
+        <h2>Template builder — header type picker</h2>
+        <p>Header section gains a type picker (None · Image · Video · Document). Image stays as-is. Video uses an .mp4 upload zone with duration/size constraints. Document uses a .pdf upload zone. The picker drives which dropzone shows below. Same component is reused by the Conversations create form per the prior epic — single source of truth.</p>
+      </div>
+    </div>
+
+    <div class="row two">
+      <!-- Variant A: Video selected -->
+      <div class="create-form">
+        <div class="form-section-header">
+          <div class="icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span class="label">Header</span>
+          <span class="req">Optional</span>
+          <div class="switch"></div>
+        </div>
+
+        <div class="type-picker">
+          <div class="type-tile">
+            <span class="glyph"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg></span>
+            <span class="name">None</span>
+          </div>
+          <div class="type-tile">
+            <span class="glyph"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M3 17l5-5 4 4 3-3 6 6"/></svg></span>
+            <span class="name">Image</span>
+          </div>
+          <div class="type-tile active">
+            <span class="glyph"><svg width="20" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M17 10l4-2.5v9L17 14z"/></svg></span>
+            <span class="name">Video</span>
+          </div>
+          <div class="type-tile">
+            <span class="glyph"><svg width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span>
+            <span class="name">Document</span>
+          </div>
+        </div>
+
+        <div class="dropzone video">
+          <span class="icon-lg video">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M17 10l4-2.5v9L17 14z"/></svg>
+          </span>
+          <div class="cta">Drag a video here or <span class="browse">browse files</span></div>
+          <div class="specs">MP4 · Up to 16 MB · 16:9 recommended</div>
+        </div>
+
+        <div class="file-row">
+          <div class="ficon video">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M17 10l4-2.5v9L17 14z"/></svg>
+          </div>
+          <div class="fmeta">
+            <div class="fname">winter-collection-teaser.mp4</div>
+            <div class="fsize">12.4 MB · 1920×1080</div>
+          </div>
+          <div class="fremove">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Variant B: Document selected -->
+      <div class="create-form">
+        <div class="form-section-header">
+          <div class="icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span class="label">Header</span>
+          <span class="req">Optional</span>
+          <div class="switch"></div>
+        </div>
+
+        <div class="type-picker">
+          <div class="type-tile">
+            <span class="glyph"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg></span>
+            <span class="name">None</span>
+          </div>
+          <div class="type-tile">
+            <span class="glyph"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M3 17l5-5 4 4 3-3 6 6"/></svg></span>
+            <span class="name">Image</span>
+          </div>
+          <div class="type-tile">
+            <span class="glyph"><svg width="20" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M17 10l4-2.5v9L17 14z"/></svg></span>
+            <span class="name">Video</span>
+          </div>
+          <div class="type-tile active">
+            <span class="glyph"><svg width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span>
+            <span class="name">Document</span>
+          </div>
+        </div>
+
+        <div class="dropzone doc">
+          <span class="icon-lg doc">
+            <svg width="20" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+          </span>
+          <div class="cta">Drag a document here or <span class="browse">browse files</span></div>
+          <div class="specs">PDF, Word, Excel, PowerPoint · Up to 100 MB</div>
+        </div>
+
+        <div class="file-row">
+          <div class="ficon doc">
+            <svg width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+          </div>
+          <div class="fmeta">
+            <div class="fname">spring-2026-catalog.pdf</div>
+            <div class="fsize">3.2 MB · 24 pages</div>
+          </div>
+          <div class="fremove">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error states — wrong-file UX (mirrors image upload today) -->
+    <div class="state-head" style="margin-top:26px;">
+      <div class="state-num">2</div>
+      <div class="state-text">
+        <h2>Wrong file dropped — same UX as image today</h2>
+        <p>Validations enforced on drop and on browse-select. Dropzone border turns red, the icon recolors, and a helper line under the dropzone names exactly what failed. Same pattern as <code style="font-size:11.5px;background:var(--bg-soft);padding:1px 5px;border-radius:4px;">FormHelperText error</code> in <code style="font-size:11.5px;background:var(--bg-soft);padding:1px 5px;border-radius:4px;">MediaUpload.tsx</code> today.</p>
+      </div>
+    </div>
+
+    <div class="row two" style="margin:0;">
+      <div class="create-form">
+        <div class="form-section-header">
+          <div class="icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span class="label">Header</span>
+          <span class="req">Video selected</span>
+          <div class="switch"></div>
+        </div>
+
+        <div class="dropzone video error">
+          <span class="icon-lg video">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M17 10l4-2.5v9L17 14z"/></svg>
+          </span>
+          <div class="cta">Drag a video here or <span class="browse">browse files</span></div>
+          <div class="specs">MP4 · Up to 16 MB · 16:9 recommended</div>
+        </div>
+        <div class="error-help">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="16.5" r="0.8" fill="currentColor"/></svg>
+          <span><strong>winter-teaser.mov</strong> isn't supported. Use MP4 (up to 16&nbsp;MB).</span>
+        </div>
+      </div>
+
+      <div class="create-form">
+        <div class="form-section-header">
+          <div class="icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span class="label">Header</span>
+          <span class="req">Document selected</span>
+          <div class="switch"></div>
+        </div>
+
+        <div class="dropzone doc error">
+          <span class="icon-lg doc">
+            <svg width="20" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+          </span>
+          <div class="cta">Drag a document here or <span class="browse">browse files</span></div>
+          <div class="specs">PDF, Word, Excel, PowerPoint · Up to 100 MB</div>
+        </div>
+        <div class="error-help">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="16.5" r="0.8" fill="currentColor"/></svg>
+          <span><strong>catalog-master.pdf</strong> is 142&nbsp;MB. Max is 100&nbsp;MB — compress or split the file.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════ ROW 2 — Composer locked previews ═════════════ -->
+  <div class="row two">
+
+    <!-- STATE 3: Video header -->
+    <div>
+      <div class="state-head">
+        <div class="state-num">3</div>
+        <div class="state-text">
+          <h2>Composer — video header (locked)</h2>
+          <p>Inserted template renders as the customer will see it. Video header shows a play overlay and duration. Body resolves variables; CTA buttons render with type tags. Replace · Remove · Send.</p>
+        </div>
+      </div>
+
+      <div class="composer">
+        <div class="conv-header">
+          <div class="avatar-md">PR</div>
+          <div class="ident">
+            <div class="name">Priya Rajan</div>
+            <div class="meta">Assigned to you · Sales-A</div>
+          </div>
+          <span class="sender-tag">Aws from Coretava</span>
+        </div>
+
+        <div class="thread">
+          <div class="msg in">Can I see this season's pieces? <span class="time">10:42</span></div>
+        </div>
+
+        <div class="window-bar">
+          <span style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+            24-hour window expired
+          </span>
+          <span class="window-pill">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 10 18 20 6"/></svg>
+            Template required
+          </span>
+        </div>
+
+        <div class="composer-body">
+          <div class="tmpl-card">
+            <div class="tmpl-head">
+              <div class="tmpl-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+              </div>
+              <div class="tmpl-name">winter_lookbook_video</div>
+              <span class="tmpl-pill approved">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 10 18 20 6"/></svg>
+                Approved
+              </span>
+              <span class="tmpl-pill locked">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                Locked
+              </span>
+            </div>
+
+            <div class="wa-frame">
+              <div class="wa-bubble">
+                <div class="wa-video">
+                  <div class="play">
+                    <div class="circle">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 5 19 12 7 19"/></svg>
+                    </div>
+                  </div>
+                  <div class="duration">0:42</div>
+                </div>
+                <div class="wa-body">
+                  <p>Hi <span class="var">Priya</span>, our winter collection just dropped. 30s teaser inside — full lookbook on our site.</p>
+                </div>
+                <div class="wa-time">10:43</div>
+              </div>
+              <div class="wa-buttons">
+                <div class="wa-button">
+                  <span class="icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><line x1="20" y1="4" x2="10" y2="14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></span>
+                  Shop the collection
+                  <span class="type-tag">URL</span>
+                </div>
+                <div class="wa-button">
+                  <span class="icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M4 9h11a5 5 0 0 1 5 5v6"/></svg></span>
+                  Send to a friend
+                  <span class="type-tag">Quick reply</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="action-bar">
+              <span class="btn">Replace</span>
+              <span class="btn remove">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 20 7"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/></svg>
+                Remove
+              </span>
+              <span class="btn send">
+                Send
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATE 4: Document header -->
+    <div>
+      <div class="state-head">
+        <div class="state-num">4</div>
+        <div class="state-text">
+          <h2>Composer — document header (locked)</h2>
+          <p>PDF tile renders WhatsApp-style: file icon, filename (as recipient sees it), size. Body resolves variables. CTA buttons render with type tags. Replace · Remove · Send.</p>
+        </div>
+      </div>
+
+      <div class="composer">
+        <div class="conv-header">
+          <div class="avatar-md" style="background:#7a9c6f;">JS</div>
+          <div class="ident">
+            <div class="name">Juliana Silva</div>
+            <div class="meta">Assigned to you · Sales-B</div>
+          </div>
+          <span class="sender-tag">Aws from Coretava</span>
+        </div>
+
+        <div class="thread">
+          <div class="msg in">Posso ver o catálogo de primavera? <span class="time">14:18</span></div>
+        </div>
+
+        <div class="window-bar">
+          <span style="display:inline-flex;align-items:center;gap:6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+            24-hour window expired
+          </span>
+          <span class="window-pill">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 10 18 20 6"/></svg>
+            Template required
+          </span>
+        </div>
+
+        <div class="composer-body">
+          <div class="tmpl-card">
+            <div class="tmpl-head">
+              <div class="tmpl-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+              </div>
+              <div class="tmpl-name">spring_catalog_pdf</div>
+              <span class="tmpl-pill approved">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 10 18 20 6"/></svg>
+                Approved
+              </span>
+              <span class="tmpl-pill locked">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                Locked
+              </span>
+            </div>
+
+            <div class="wa-frame">
+              <div class="wa-bubble">
+                <div class="wa-doc">
+                  <div class="doc-icon">PDF</div>
+                  <div class="doc-meta">
+                    <div class="doc-name">spring-2026-catalog.pdf</div>
+                    <div class="doc-size">3.2 MB · 24 pages</div>
+                  </div>
+                  <div class="dl-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="4" x2="12" y2="16"/><polyline points="6 12 12 18 18 12"/><line x1="5" y1="21" x2="19" y2="21"/></svg>
+                  </div>
+                </div>
+                <div class="wa-body">
+                  <p>Olá <span class="var">Juliana</span>, segue o catálogo de primavera 2026. Qualquer dúvida, é só responder.</p>
+                </div>
+                <div class="wa-time">14:19</div>
+              </div>
+              <div class="wa-buttons">
+                <div class="wa-button">
+                  <span class="icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><line x1="20" y1="4" x2="10" y2="14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></span>
+                  Ver no site
+                  <span class="type-tag">URL</span>
+                </div>
+                <div class="wa-button">
+                  <span class="icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M4 9h11a5 5 0 0 1 5 5v6"/></svg></span>
+                  Falar com vendedora
+                  <span class="type-tag">Quick reply</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="action-bar">
+              <span class="btn">Replace</span>
+              <span class="btn remove">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 20 7"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/></svg>
+                Remove
+              </span>
+              <span class="btn send">
+                Send
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════ ROW 3 — Campaigns preview pane ═════════════ -->
+  <div class="row">
+    <div class="state-head">
+      <div class="state-num">5</div>
+      <div class="state-text">
+        <h2>Campaigns builder — preview pane</h2>
+        <p>The iPhone preview on the right side of the campaign template builder renders the chosen header. Video shows play overlay + duration; document shows the PDF tile with the uploaded filename.</p>
+      </div>
+    </div>
+
+    <div class="preview-grid">
+
+      <!-- Video preview -->
+      <div class="preview-pane">
+        <div class="pane-label">Live preview <span class="badge">Video header</span></div>
+        <div class="iphone">
+          <div class="top-bar">
+            <div class="biz"><div class="av">U</div>Uni Italo</div>
+            <div>10:43</div>
+          </div>
+          <div class="wa-bubble">
+            <div class="wa-video">
+              <div class="play"><div class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 5 19 12 7 19"/></svg></div></div>
+              <div class="duration">0:42</div>
+            </div>
+            <div class="wa-body">
+              <p>Hi <span class="var">Priya</span>, our winter collection just dropped. 30s teaser inside — full lookbook on our site.</p>
+            </div>
+            <div class="wa-time">10:43</div>
+          </div>
+          <div class="wa-buttons" style="max-width:100%;">
+            <div class="wa-button">
+              <span class="icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><line x1="20" y1="4" x2="10" y2="14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></span>
+              Shop the collection
+              <span class="type-tag">URL</span>
+            </div>
+            <div class="wa-button">
+              <span class="icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M4 9h11a5 5 0 0 1 5 5v6"/></svg></span>
+              Send to a friend
+              <span class="type-tag">Quick reply</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document preview -->
+      <div class="preview-pane">
+        <div class="pane-label">Live preview <span class="badge">Document header · XLSX</span></div>
+        <div class="iphone">
+          <div class="top-bar">
+            <div class="biz"><div class="av">U</div>Uni Italo</div>
+            <div>14:19</div>
+          </div>
+          <div class="wa-bubble">
+            <div class="wa-doc">
+              <div class="doc-icon">XLSX</div>
+              <div class="doc-meta">
+                <div class="doc-name">q1-sales-report.xlsx</div>
+                <div class="doc-size">820 KB · 4 sheets</div>
+              </div>
+              <div class="dl-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="4" x2="12" y2="16"/><polyline points="6 12 12 18 18 12"/><line x1="5" y1="21" x2="19" y2="21"/></svg>
+              </div>
+            </div>
+            <div class="wa-body">
+              <p>Olá <span class="var">Juliana</span>, segue o relatório de vendas do 1º trimestre. Qualquer dúvida, é só responder.</p>
+            </div>
+            <div class="wa-time">14:19</div>
+          </div>
+          <div class="wa-buttons" style="max-width:100%;">
+            <div class="wa-button">
+              <span class="icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><line x1="20" y1="4" x2="10" y2="14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></span>
+              Ver no site
+              <span class="type-tag">URL</span>
+            </div>
+            <div class="wa-button">
+              <span class="icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M4 9h11a5 5 0 0 1 5 5v6"/></svg></span>
+              Falar com vendedora
+              <span class="type-tag">Quick reply</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <h3>Behavioral notes</h3>
+    <ul>
+      <li><strong>Header type picker</strong> — single component shared by Campaigns and Conversations create forms (parity continues from prior epic).</li>
+      <li><strong>Upload only</strong> — no hosted URL field. Same as image headers today. File is stored as the template's header sample and reused on every send.</li>
+      <li><strong>Variable substitution</strong> — applies to the body only; header media is fixed per template, no per-send variation.</li>
+      <li><strong>Approval gate</strong> — Meta reviews the uploaded sample. Templates remain disabled until Approved, same as today.</li>
+      <li><strong>Render parity</strong> — Campaigns preview and Conversations composer use the same render component for video/document bubbles. No drift between surfaces.</li>
+      <li><strong>Languages</strong> — header media is language-agnostic; body translations (EN / PT-BR / ES) pick the right variant per contact.</li>
+      <li><strong>Replace</strong> — opens the picker to switch to a different approved template entirely; not a media-only swap.</li>
+      <li><strong>Validations (per Meta)</strong> — video: MP4 up to 16&nbsp;MB. Documents: PDF, Word, Excel, PowerPoint up to 100&nbsp;MB. Enforced client-side on drop and on browse-select; backend re-checks at upload. Same error treatment as image today (red dropzone border + helper text).</li>
+      <li><strong>Doc icon badge</strong> — file extension shown in the WhatsApp bubble so recipients can tell formats apart at a glance. Reuses the existing neutral document tile; no per-format color coding in scope.</li>
+    </ul>
+  </div>
+
+</body>
+</html>
