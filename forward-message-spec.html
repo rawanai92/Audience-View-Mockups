@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tavyo — Forward a message (product spec, full experience)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--orange:#ff8243;--navy:#0a192f;--navy2:#112240;--ink:#1c2733;--slate:#475569;
+    --mut:#64748b;--line:#e2e8f0;--bg:#f7f9fc;--ok:#16a34a;--okbg:#ecfdf5;--warn:#d97706;
+    --warnbg:#fffbeb;--bad:#dc2626;--badbg:#fef2f2;--frag:#db2777;--card:#fff;--purple:#6E5BD0}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px 96px}
+  h1,h2,h3,h4,h5{font-family:'Outfit',sans-serif;color:var(--navy);line-height:1.2}
+  header.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:54px 0 46px;margin-bottom:36px;border-bottom:4px solid var(--orange)}
+  header.hero .wrap{padding-bottom:0}
+  .kicker{font-family:'Outfit';font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--orange);margin:0 0 10px}
+  header.hero h1{color:#fff;font-size:38px;font-weight:800;margin:0 0 12px}
+  header.hero p{color:#c7d2e0;font-size:17px;max-width:820px;margin:0}
+  .meta{margin-top:22px;display:flex;gap:26px;flex-wrap:wrap;font-size:13px;color:#90a4bd}
+  .meta b{color:#dce6f2;font-weight:600}
+  .meta a{color:var(--orange);text-decoration:none}
+  h2{font-size:25px;margin:46px 0 6px;padding-top:8px}
+  h2 .num{color:var(--orange);font-weight:800;margin-right:10px}
+  h3.sec{font-size:18px;margin:24px 0 4px}
+  .lead{color:var(--slate);font-size:15.5px;margin:6px 0 18px;max-width:880px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:16px 0;box-shadow:0 1px 2px rgba(10,25,47,.04)}
+  .headline{border-left:5px solid var(--orange);background:linear-gradient(90deg,#fff7f2,#fff);padding:22px 26px;border-radius:0 14px 14px 0;margin:8px 0 24px}
+  .headline h3{margin:0 0 8px;font-size:20px;color:var(--navy)}
+  .headline p{margin:0;color:var(--slate);font-size:15px}
+  table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13.5px}
+  th{font-family:'Outfit';text-align:left;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);padding:9px 11px;border-bottom:2px solid var(--line)}
+  td{padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.k{font-weight:600;color:var(--ink)}
+  .tool{font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:12px;background:#f1f5f9;color:#0f172a;padding:1px 6px;border-radius:5px;white-space:nowrap}
+  .badge{display:inline-block;font-family:'Outfit';font-weight:700;font-size:11px;padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .b-ok{background:var(--okbg);color:var(--ok)}.b-warn{background:var(--warnbg);color:var(--warn)}
+  .b-bad{background:var(--badbg);color:var(--bad)}.b-info{background:#eff6ff;color:#1d4ed8}
+  .now{color:var(--ok);font-weight:700}.wire{color:var(--warn);font-weight:700}.stop{color:var(--bad);font-weight:700}
+  .flow{margin:14px 0}
+  .flow .fn{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+  .flow .fn:last-child{border-bottom:none}
+  .flow .fnum{font-family:'Outfit';font-weight:800;color:#fff;background:var(--navy);min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .flow .fb{flex:1}.flow .fb .ft{font-family:'Outfit';font-weight:700;color:var(--navy);font-size:14.5px}
+  .flow .fb .fd{font-size:13px;color:var(--slate);margin-top:2px}
+  .flow .fb .fsee{font-size:12.5px;color:var(--mut);margin-top:5px}
+  .flow .fb .fsee b{color:var(--ink)}
+  .flow .fb .fsee .row{margin-top:2px}
+  .paths{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+  .pathcard{border:1px solid var(--line);border-radius:14px;padding:20px 22px;background:#fff}
+  .pathcard.ours{border-top:4px solid var(--orange)}.pathcard.cust{border-top:4px solid var(--mut)}
+  .pathcard h3{margin:0 0 2px;font-size:18px}.pathcard .sub{font-size:12px;color:var(--mut);font-family:Outfit;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .pathcard ul{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--slate)}.pathcard li{margin:5px 0}
+  .pill{display:inline-block;font-family:'Outfit';font-weight:700;font-size:10.5px;padding:2px 8px;border-radius:6px}
+  .p-now{background:#ecfdf5;color:var(--ok)}.p-wire{background:#fffbeb;color:var(--warn)}.p-stop{background:var(--badbg);color:var(--bad)}.p-mock{background:#f1f5f9;color:var(--mut)}
+  .callout{background:var(--warnbg);border:1px solid #fde68a;border-radius:12px;padding:16px 20px;margin:16px 0}
+  .callout.info{background:#eff6ff;border-color:#bfdbfe}.callout.ok{background:#ecfdf5;border-color:#bbf7d0}.callout.bad{background:var(--badbg);border-color:#fecaca}.callout.purple{background:#f5f3ff;border-color:#ddd6fe}
+  .callout h4{margin:0 0 8px;font-size:15px;color:var(--ink)}.callout p{margin:0;font-size:13.5px;color:var(--slate)}
+  .rubric li{margin:6px 0}
+  .truth{display:inline-flex;align-items:center;gap:5px;font-family:'Outfit';font-weight:700;font-size:11px;padding:3px 10px;border-radius:20px}
+  .truth::before{content:"";width:6px;height:6px;border-radius:50%}
+  .t-ok{background:var(--okbg);color:var(--ok)}.t-ok::before{background:var(--ok)}
+  .t-wait{background:var(--warnbg);color:var(--warn)}.t-wait::before{background:var(--warn)}
+  .t-no{background:var(--badbg);color:var(--bad)}.t-no::before{background:var(--bad)}
+  footer{color:var(--mut);font-size:12.5px;text-align:center;margin-top:50px;padding-top:20px;border-top:1px solid var(--line)}
+  @media(max-width:780px){.paths{grid-template-columns:1fr}header.hero h1{font-size:28px}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Product spec · v1 · WhatsApp</p>
+    <h1>Forward a message — the full experience</h1>
+    <p>The complete forward experience for Conversations, beat by beat: what the agent sees and does inside the
+       24-hour window (the everyday flow), and how it adapts the moment that window is closed. Grounded in what
+       the platform can actually do today, with the new build clearly marked.</p>
+    <div class="meta">
+      <span><b>Module</b> Conversations · WhatsApp only</span>
+      <span><b>Spike</b> <a href="https://app.clickup.com/t/90181619228/86exwg5f0">86exwg5f0</a></span>
+      <span><b>Prototype</b> mockup-forward-message.html</span>
+      <span><b>Status</b> closed-window approach approved</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HEADLINE -->
+  <div class="headline">
+    <h3>The one thing to know first: <em>forwarding is a re-send, and the "Forwarded" tag is ours alone</em></h3>
+    <p>WhatsApp has no native forward. We re-send the original content as a new message. So the customer receives a
+      <b>normal-looking message</b> — Meta does not let businesses show a "Forwarded" label. The label and the
+      "Forwarded from…" provenance live <b>only in our agent inbox</b>. Everything below builds on that one fact.</p>
+  </div>
+
+  <!-- ============ 1 · THE EVERYDAY FLOW ============ -->
+  <h2><span class="num">1</span>The everyday flow — forwarding inside the 24-hour window</h2>
+  <p class="lead">This is the experience to live through first: a message is open, the customer is active, and the agent
+    wants it in another conversation. Beat by beat — exactly what they see and do.</p>
+  <div class="card flow">
+    <div class="fn"><div class="fnum">1</div><div class="fb">
+      <div class="ft">Find the message → ⋯ → Forward</div>
+      <div class="fd">Hovering any text or media bubble reveals a borderless <b>⋯</b> action on the bubble's edge. Opening it shows Reply · Copy · <b>Forward</b>.</div>
+      <div class="fsee"><div class="row"><b>You see:</b> the ⋯ appears only on hover, so it never clutters the thread.</div>
+        <div class="row"><b>You do:</b> click Forward. (Templates, interactive/button messages and reactions don't offer Forward — see §2.)</div></div>
+    </div></div>
+    <div class="fn"><div class="fnum">2</div><div class="fb">
+      <div class="ft">"Forward to…" opens — with a preview of exactly what's being sent</div>
+      <div class="fd">A focused panel shows the message being forwarded at the top (the text, or the media + its caption), then a searchable list of conversations.</div>
+      <div class="fsee"><div class="row"><b>You see:</b> a faithful preview so you're sure you grabbed the right message; below it, your conversations.</div>
+        <div class="row"><b>You do:</b> search or scroll, then pick <b>one</b> destination. The picker shows <b>every</b> conversation in your workspace — open or closed window — nothing is hidden (see §3).</div></div>
+    </div></div>
+    <div class="fn"><div class="fnum">3</div><div class="fb">
+      <div class="ft">(Media only) tweak the caption</div>
+      <div class="fd">For an image / video / document, the caption is editable before sending. The file itself is re-used from our storage — the agent never re-uploads.</div>
+      <div class="fsee"><div class="row"><b>You see:</b> the original caption, pre-filled and editable.</div></div>
+    </div></div>
+    <div class="fn"><div class="fnum">4</div><div class="fb">
+      <div class="ft">The truth pill confirms what'll happen → Forward</div>
+      <div class="fd">A status pill in the footer states the outcome <b>before</b> you commit. For an open window it reads <span class="truth t-ok">Sends instantly</span>.</div>
+      <div class="fsee"><div class="row"><b>You see:</b> a single, honest "this is what happens" line — the same truth-pill pattern the composer uses.</div>
+        <div class="row"><b>You do:</b> click <b>Forward</b>.</div></div>
+    </div></div>
+    <div class="fn"><div class="fnum">5</div><div class="fb">
+      <div class="ft">Delivered — and tagged in our inbox</div>
+      <div class="fd">The view switches to the destination conversation. The forwarded message appears with a grey <b>"↪ Forwarded"</b> label and a <b>"Forwarded from {sender}"</b> line; a toast confirms "Forwarded to {name}".</div>
+      <div class="fsee"><div class="row"><b>You see:</b> the message delivered (✓✓), labelled and attributed — for your team only.</div>
+        <div class="row"><b>The customer sees:</b> a normal message. No forwarded tag, no provenance (see headline).</div></div>
+    </div></div>
+  </div>
+
+  <!-- ============ 2 · WHAT CAN BE FORWARDED ============ -->
+  <h2><span class="num">2</span>What can be forwarded</h2>
+  <p class="lead">Inside the window, every supported type re-sends instantly. The right column is where it gets
+    interesting — what happens to each type after 24h (detailed in §5).</p>
+  <div class="card">
+    <table>
+      <tr><th>Content</th><th>Inside 24h</th><th>After 24h (closed window)</th></tr>
+      <tr><td class="k">Text</td><td><span class="now">Instant</span>, verbatim</td><td>One-off <b>text</b> template → reopens chat <span class="pill p-now">exists today</span></td></tr>
+      <tr><td class="k">Image</td><td><span class="now">Instant</span>, media re-used</td><td>One-off <b>image-header</b> template <span class="pill p-now">header exists</span></td></tr>
+      <tr><td class="k">Document</td><td><span class="now">Instant</span>, media re-used</td><td>One-off <b>document-header</b> template <span class="pill p-wire">new build</span></td></tr>
+      <tr><td class="k">Video</td><td><span class="now">Instant</span>, media re-used</td><td>One-off <b>video-header</b> template <span class="pill p-wire">new build</span></td></tr>
+      <tr><td class="k">Audio / voice note</td><td><span class="now">Instant</span></td><td><span class="stop">Blocked</span> — WhatsApp has no audio template header</td></tr>
+      <tr><td class="k">Template / interactive / reaction</td><td colspan="2"><span class="stop">No Forward action</span> — not meaningful to re-send verbatim (out of v1)</td></tr>
+    </table>
+  </div>
+
+  <!-- ============ 3 · THE PICKER ============ -->
+  <h2><span class="num">3</span>The destination picker</h2>
+  <p class="lead">One small surface, a few firm rules — it's where "forward to whoever you need" is honoured.</p>
+  <div class="card">
+    <table>
+      <tr><td class="k" style="width:30%">Shows everyone</td><td>Every conversation in the tenant — <b>open and closed windows alike</b>. A closed one isn't hidden; it's labelled "Window closed · 24h elapsed" and the flow adapts (§5).</td></tr>
+      <tr><td class="k">One destination</td><td>v1 forwards to a single conversation. Bulk / multi-select is out.</td></tr>
+      <tr><td class="k">Same tenant only</td><td>Source and destination are always the same workspace. No cross-tenant, no cross-channel (e.g. IG → WA).</td></tr>
+      <tr><td class="k">Search</td><td>Filter by contact name. (Recents / ordering can be refined later.)</td></tr>
+      <tr><td class="k">New contact</td><td><span class="wire">Phase 2</span> — forwarding to someone with no existing conversation.</td></tr>
+    </table>
+  </div>
+
+  <!-- ============ 4 · THE FORWARDED TREATMENT ============ -->
+  <h2><span class="num">4</span>Two views of the same forward — ours vs. the customer's</h2>
+  <p class="lead">The single most important thing for agents to internalise. We can be rich internally; the customer just gets the content.</p>
+  <div class="paths">
+    <div class="pathcard ours">
+      <div class="sub">In our agent inbox</div>
+      <h3>Labelled &amp; attributed</h3>
+      <ul>
+        <li>Grey italic <b>"↪ Forwarded"</b> label on the destination bubble</li>
+        <li><b>"Forwarded from {Contact / Agent}"</b> provenance line</li>
+        <li>We keep: original sender, source conversation, original time</li>
+        <li>Marked <b>team-only</b> — visible to agents, tenant-scoped</li>
+        <li>Jump-to-original from the line → <span class="wire">Phase 2</span> (static text in v1)</li>
+      </ul>
+    </div>
+    <div class="pathcard cust">
+      <div class="sub">On the customer's phone</div>
+      <h3>A normal message</h3>
+      <ul>
+        <li><b>No</b> "Forwarded" badge (Meta doesn't expose it to businesses)</li>
+        <li><b>No</b> provenance — they never see who it came from</li>
+        <li>Just the text, or the media + caption</li>
+        <li>Agent-facing copy must never promise "they'll see it was forwarded"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 5 · AFTER 24H ============ -->
+  <h2><span class="num">5</span>Forwarding after the 24-hour window</h2>
+  <p class="lead">When the customer has been quiet &gt;24h, WhatsApp only delivers <b>approved templates</b>. The agent
+    can still pick that conversation — the flow adapts and the truth pill tells the truth. Forwarding reopens the
+    chat by sending the content <b>as a one-off template</b>.</p>
+
+  <div class="callout info"><h4>How a one-off template works (it already exists for text)</h4><p>The content is auto-wrapped into a single-use WhatsApp template, submitted to Meta, and delivered the <b>moment it's approved</b> (usually minutes) — which reopens the conversation. The template is for that send only and is <b>auto-deleted ~24h later</b>. If an already-approved template matches the content, it's reused instantly.</p></div>
+
+  <h3 class="sec">What the agent experiences, by type</h3>
+  <div class="card flow">
+    <div class="fn"><div class="fnum">A</div><div class="fb">
+      <div class="ft">Text → one-off text template <span class="truth t-wait">Queued · reopens chat</span></div>
+      <div class="fd">Picks the closed conversation; the panel explains the reopen and the ~24h auto-delete.</div>
+      <div class="fsee"><div class="row"><b>You do:</b> "Send as one-off". <b>You see:</b> a pending bubble — flips to delivered once Meta approves.</div></div>
+    </div></div>
+    <div class="fn"><div class="fnum">B</div><div class="fb">
+      <div class="ft">Image / Document / Video → one-off media template <span class="truth t-wait">Queued · reopens chat</span></div>
+      <div class="fd">The file rides in the template <b>header</b>; a short <b>agent-editable line</b> becomes the body (default: "Hi 👋 here's the file you asked about.").</div>
+      <div class="fsee"><div class="row"><b>You see:</b> a "Customer receives: [your file] + the line above" preview, and a clear note that <b>the original caption is replaced</b> by that line.</div>
+        <div class="row"><b>You do:</b> edit the line if you like → "Send as one-off".</div></div>
+    </div></div>
+    <div class="fn"><div class="fnum">C</div><div class="fb">
+      <div class="ft">Audio / voice note → blocked <span class="truth t-no">Not available</span></div>
+      <div class="fd">WhatsApp has no audio template header, so there's no honest way to deliver it post-window.</div>
+      <div class="fsee"><div class="row"><b>You see:</b> a clear reason, plus a workaround: send a text to reopen the chat; once the customer replies, forward the voice note. Optional "🔔 notify me when they reply".</div></div>
+    </div></div>
+  </div>
+
+  <div class="callout"><h4>Two honesty points to message everywhere</h4><p><b>1.</b> Post-24h is <b>not instant</b> — it waits on Meta approval (usually minutes); the bubble shows pending until delivered. &nbsp; <b>2.</b> For media, <b>what the agent sees ≠ what the customer receives</b> — the editable line replaces the caption. Both are shown in the panel before the agent commits.</p></div>
+
+  <!-- ============ 6 · WHAT BREAKS THE FLOW ============ -->
+  <h2><span class="num">6</span>States &amp; edge cases (so they don't surprise anyone)</h2>
+  <p class="lead">Beyond the happy path — the moments that need a designed state, not a dead end.</p>
+  <div class="card">
+    <table>
+      <tr><th>Moment</th><th>What should happen</th><th>Pill / state</th></tr>
+      <tr><td class="k">Closed window · media</td><td>Reopen via one-off media template (editable line)</td><td><span class="truth t-wait">Queued · reopens</span></td></tr>
+      <tr><td class="k">Closed window · audio</td><td>Blocked with reason + reopen workaround</td><td><span class="truth t-no">Not available</span></td></tr>
+      <tr><td class="k">One-off rejected by Meta</td><td>Forward marked failed; agent can edit &amp; resubmit or pick a template <span class="pill p-wire">define</span></td><td><span class="stop">Failed</span></td></tr>
+      <tr><td class="k">Send failure (network / Meta)</td><td>Bubble shows failed with retry — standard outbound behaviour</td><td><span class="stop">Failed · retry</span></td></tr>
+      <tr><td class="k">No destination chosen</td><td>Forward button disabled; pill reads "Pick a destination"</td><td><span class="pill p-mock">disabled</span></td></tr>
+      <tr><td class="k">Forwarding a forward</td><td>Allowed; provenance reflects the most recent source (depth tracking is Phase 3)</td><td><span class="now">OK</span></td></tr>
+      <tr><td class="k">Customer-identity privacy</td><td>Open question: hide the original customer's name when forwarding across two customer chats?</td><td><span class="wire">decide</span></td></tr>
+    </table>
+  </div>
+
+  <!-- ============ 7 · BUILD STATUS ============ -->
+  <h2><span class="num">7</span>What's reusable vs. net-new (for engineering)</h2>
+  <p class="lead">Forward rides almost entirely on infrastructure we already have. Here's the honest build picture.</p>
+  <div class="card">
+    <table>
+      <tr><th>Capability</th><th>Status</th><th>Note</th></tr>
+      <tr><td class="k">Re-send on the existing send pipeline</td><td><span class="now">reuse</span></td><td>No new delivery / retry infra</td></tr>
+      <tr><td class="k">Media re-use (no re-upload)</td><td><span class="now">reuse</span></td><td>Inbound media already mirrored to our storage</td></tr>
+      <tr><td class="k">One-off <b>text</b> template reopen</td><td><span class="now">reuse</span></td><td>Auto-create → approve → send → auto-delete ~24h already built</td></tr>
+      <tr><td class="k">One-off <b>image-header</b> template</td><td><span class="wire">extend</span></td><td>Image header supported for campaigns; wire it to the reopen path</td></tr>
+      <tr><td class="k">One-off <b>document / video</b> headers</td><td><span class="wire">new</span></td><td>Net-new: only IMAGE header is wired today (Meta supports doc/video)</td></tr>
+      <tr><td class="k">Forward UI: ⋯ action, picker, "Forwarded" + provenance</td><td><span class="wire">new</span></td><td>The visible feature; persist the forwarded-from reference</td></tr>
+      <tr><td class="k">Audio post-window</td><td><span class="stop">n/a</span></td><td>Impossible — no Meta audio template header</td></tr>
+    </table>
+  </div>
+
+  <!-- ============ 8 · ACCEPTANCE ============ -->
+  <h2><span class="num">8</span>Acceptance criteria</h2>
+  <div class="card">
+    <table>
+      <tr><td class="k" style="width:8%">AC1</td><td>⋯ menu shows <b>Forward</b> on text + media (image/video/document/audio); not on templates/interactive/reactions.</td></tr>
+      <tr><td class="k">AC2</td><td>Forward panel shows a preview + a searchable list of the tenant's conversations, <b>open and closed alike</b>; one destination selectable.</td></tr>
+      <tr><td class="k">AC3</td><td>For media, caption is editable; the media is re-used (agent never re-uploads).</td></tr>
+      <tr><td class="k">AC4</td><td>A footer truth pill states the outcome before send: Sends instantly / Queued · reopens / Not available.</td></tr>
+      <tr><td class="k">AC5</td><td><b>Inside 24h:</b> any supported content forwards instantly; destination bubble shows "Forwarded" + "Forwarded from {sender}".</td></tr>
+      <tr><td class="k">AC6</td><td><b>Closed · text:</b> reuses the one-off text template — queued → delivered on approval → reopens → auto-deleted.</td></tr>
+      <tr><td class="k">AC7</td><td><b>Closed · image/document/video:</b> one-off media-header template (file = header, editable line = body); panel shows "Customer receives [file] + line" and the caption-replacement note.</td></tr>
+      <tr><td class="k">AC8</td><td><b>Closed · audio:</b> blocked with reason + reopen workaround + optional notify; nothing sent.</td></tr>
+      <tr><td class="k">AC9</td><td>Provenance is internal-only — never sent to Meta or the customer.</td></tr>
+      <tr><td class="k">AC10</td><td>Source and destination are the same tenant; no cross-tenant / cross-channel.</td></tr>
+    </table>
+  </div>
+
+  <!-- ============ 9 · DECISIONS ============ -->
+  <h2><span class="num">9</span>Decisions &amp; open questions</h2>
+  <div class="paths">
+    <div class="pathcard ours">
+      <div class="sub">Decided for v1</div>
+      <h3>Locked</h3>
+      <ul>
+        <li>Destinations: any conversation, open or closed</li>
+        <li>Closed window: text + image + document + video reopen via one-off template; audio blocked</li>
+        <li>Media body: short, agent-editable line (replaces caption)</li>
+        <li>Who can forward: all agents (no role gate)</li>
+        <li>Provenance: full "Forwarded from {sender}", team-only</li>
+      </ul>
+    </div>
+    <div class="pathcard cust">
+      <div class="sub">Open</div>
+      <h3>Needs a call</h3>
+      <ul>
+        <li>Build sequencing: text+image first, then document+video — together or staged?</li>
+        <li>Default body line per type; may the agent leave it blank?</li>
+        <li>Rejection UX: how a Meta-rejected one-off is surfaced &amp; retried</li>
+        <li>Audio "notify me when they reply" — real capability or just a message?</li>
+        <li>Privacy: hide the original customer's identity across customer chats?</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 10 · EXPERIENCE IT ============ -->
+  <h2><span class="num">10</span>Experience it — the interactive prototype</h2>
+  <p class="lead">Everything above is demonstrated end-to-end in <span class="tool">mockup-forward-message.html</span> (opens like the live platform). Walk these three to feel the whole spec.</p>
+  <div class="card">
+    <table>
+      <tr><th>Try</th><th>Do</th><th>What you'll feel</th></tr>
+      <tr><td class="k">The everyday flow</td><td>Forward the <b>image</b> in Lara's thread → pick <b>João</b> (open)</td><td>Instant forward; bubble labelled "Forwarded from Lara" — the §1 happy path</td></tr>
+      <tr><td class="k">Closed-window media</td><td>Forward the <b>document</b> → pick <b>Maram</b> (closed)</td><td>The one-off document template path with the editable line — §5B</td></tr>
+      <tr><td class="k">The honest block</td><td>Forward the <b>voice note</b> → pick <b>Maram</b></td><td>A clear "can't send audio post-24h" + workaround — §5C</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3 class="sec" style="margin-top:0">Judge it — the review rubric</h3>
+    <ul class="rubric">
+      <li><b>Legible</b> — before I send, do I know exactly what the customer will receive (especially post-24h)?</li>
+      <li><b>Honest</b> — does the truth pill ever over-promise (e.g. imply instant when it's queued)?</li>
+      <li><b>Unblocked</b> — can I forward to whoever I need, or do I hit a wall I don't understand?</li>
+      <li><b>Familiar</b> — does it feel like the conversations inbox I already use, or a new thing to learn?</li>
+      <li><b>Safe</b> — is provenance clearly team-only, with no risk of leaking it to the customer?</li>
+    </ul>
+  </div>
+
+  <footer>
+    Tavyo · Conversations · Forward a message (WhatsApp v1) — product spec · companion to the interactive prototype
+    <span class="tool">mockup-forward-message.html</span> and the closed-window decision brief.
+  </footer>
+
+</div>
+</body>
+</html>
